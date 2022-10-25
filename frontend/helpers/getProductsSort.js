@@ -3,10 +3,10 @@ import axios from 'axios';
 export async function getProducts(sort, param, setAllProducts) {
   try {
     const { data } = await axios.get(
-      'https://cms.dendels.com/' +
-        `products?category.name_contains=${param}&_sort=${sort.method}:${
-          sort.asc ? 'ASC' : 'DESC'
-        }`
+      'https://cms.puppetinos.com/' +
+        `dendels-products?dendels-category.name_contains=${param}&_sort=${
+          sort.method
+        }:${sort.asc ? 'ASC' : 'DESC'}`
     );
 
     const products = data;

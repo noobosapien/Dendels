@@ -33,10 +33,9 @@ export default function ProductCard({ product }) {
 
   if (product) {
     prod.id = product.id ? product.id : '';
-    prod.img =
-      product.images && product.images[0] ? product.images[0].url : candle.src;
+    prod.img = product.image && product.image ? product.image.url : '';
     prod.name = product.name ? product.name : 'Name';
-    prod.price = product.price ? product.price : '0';
+    prod.price = product.lowPrice ? product.lowPrice : '0';
     prod.slug = product.slug ? product.slug : '';
     prod.noOfReviews = product.noofreviews ? product.noofreviews : 0;
     prod.rating = product.rating ? product.rating : 0;
@@ -115,65 +114,17 @@ export default function ProductCard({ product }) {
                   <Typography
                     variant="body2"
                     sx={(theme) => ({
-                      fontWeight: '700',
-                      fontSize: '1.5rem',
+                      fontWeight: '300',
+                      fontSize: '1.0rem',
                       color: theme.palette.common.lightGray,
                     })}
                   >
                     {prod.name}
                   </Typography>
                 </Grid>
-
-                <Grid item>
-                  <Typography
-                    variant="subtitle"
-                    sx={(theme) => ({
-                      fontSize: '2rem',
-                      color: theme.palette.common.greenBlue,
-                      fontWeight: '600',
-                    })}
-                  >
-                    ${prod.price}
-                  </Typography>
-                </Grid>
-
-                <Grid item>
-                  <Rating
-                    precision={0.5}
-                    disabled={prod.rating === 0}
-                    readOnly
-                    size="small"
-                    value={prod.rating}
-                  />
-                </Grid>
-
-                <Grid item>
-                  <Typography
-                    variant="body2"
-                    sx={(theme) => ({
-                      fontFamily: 'Montserrat',
-                      fontWeight: '700',
-                      color: theme.palette.common.lightGray,
-                    })}
-                  >
-                    {prod.noOfReviews
-                      ? `(${prod.noOfReviews} reviews)`
-                      : '(No reviews yet)'}
-                  </Typography>
-                </Grid>
               </Grid>
             </CardContent>
           </CardActionArea>
-
-          <CardActions>
-            <ImageButton
-              color="primary"
-              variant="contained"
-              onClick={handleAddToCart}
-            >
-              <AddShoppingCartIcon />
-            </ImageButton>
-          </CardActions>
         </Card>
       </Grid>
 

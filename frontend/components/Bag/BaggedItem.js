@@ -39,7 +39,12 @@ export default function BaggedItem({ item, removeItemHandler }) {
                   </Grid>
 
                   <Grid item>
-                    <Typography>Each: {item.price.toFixed(2)}</Typography>
+                    <Typography>
+                      Each:{' '}
+                      {item.sale
+                        ? item.lowPrice.toFixed(2)
+                        : item.highPrice.toFixed(2)}
+                    </Typography>
                   </Grid>
                 </Grid>
               </Grid>
@@ -61,7 +66,7 @@ export default function BaggedItem({ item, removeItemHandler }) {
 
           <Grid item>
             <Typography variant="body2" sx={{ fontSize: '2rem' }}>
-              $ {(item.price * item.quantity).toFixed(2)}
+              $ {(item.lowPrice * item.quantity).toFixed(2)}
             </Typography>
           </Grid>
         </Grid>

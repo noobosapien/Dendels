@@ -72,15 +72,19 @@ const theme = createTheme({
     h4: {
       fontFamily: 'Montserrat',
       // fontWeight: 700,
-      fontSize: '3rem',
+      fontSize: '1.5rem',
     },
     h5: {
       fontFamily: 'Montserrat',
-      fontSize: '1.4rem',
+      fontSize: '1.2rem',
       // fontWeight: 700,
     },
+    h6: {
+      fontFamily: 'Montserrat',
+      fontSize: '1rem',
+    },
     body1: {
-      // fontFamily: 'Montserrat',
+      fontFamily: 'Montserrat',
       fontSize: '0.8rem',
     },
     body2: {

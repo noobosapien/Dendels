@@ -186,8 +186,8 @@ export default function Layout({ title, description, children }) {
       <footer
         style={{
           backgroundColor: '#fff',
-          marginTop: '15%',
-          paddingTop: '4rem',
+          // marginTop: '15%',
+          // paddingTop: '4rem',
           paddingBottom: '4rem',
         }}
       >

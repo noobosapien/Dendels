@@ -11,7 +11,7 @@ export async function setReview(
 ) {
   try {
     const res = await axios.post(
-      `https://cms.dendels.com/reviews?id=${productID}`,
+      `https://cms.puppetinos.com/reviews?id=${productID}`,
       {
         rating,
         user: name,

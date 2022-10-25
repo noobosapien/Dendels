@@ -3,7 +3,7 @@ import axios from 'axios';
 export async function processOrder(details) {
   try {
     const { data } = await axios.post(
-      `https://cms.dendels.com/orders/process`,
+      `https://cms.puppetinos.com/orders/process`,
       // `http://localhost:1337/orders/process`,
       details
     );

@@ -42,8 +42,8 @@ import { Store } from '../../utils/store';
 import { getProductInfo } from '../../helpers/getProductInfo';
 import { setDebug } from '../../helpers/setDebug';
 import Message from '../../components/common/Message';
-import Coconut from '../../public/coconut.svg';
-import Eco from '../../public/eco.svg';
+import VariantGrid from '../../components/Product/VariantGrid';
+import Returns from '../../components/Product/Returns';
 
 export default function ProductPage(props) {
   const { product } = props;
@@ -55,6 +55,8 @@ export default function ProductPage(props) {
   const [showForm, setShowForm] = useState(false);
   const [page, setPage] = useState(1);
   const [amount, setAmount] = useState(1);
+  const [variant, setVariant] = useState({});
+  const [image, setImage] = useState('');
 
   const theme = useTheme();
   const matchesMD = useMediaQuery(theme.breakpoints.down('md'));
@@ -71,39 +73,22 @@ export default function ProductPage(props) {
   const prodInfo = product instanceof Array && product.length ? product[0] : {};
 
   useEffect(() => {
-    const updateReviewsAndDebug = async () => {
-      try {
-        const info = await getProductInfo(product[0]?.id);
-        prodInfo.noofreviews =
-          info instanceof Array && info[0].noofreviews
-            ? info[0].noofreviews
-            : 0;
-        prodInfo.rating =
-          info instanceof Array && info[0].rating ? info[0].rating : 0;
-        setUpdate(update + 1);
+    // console.log(product[0]);
+    if (
+      product[0].dendels_variants instanceof Array &&
+      product[0].dendels_variants.length > 0
+    ) {
+      setVariant(product[0].dendels_variants[0]);
+    }
+  }, [product]);
 
-        await setDebug({
-          page: prodInfo.slug,
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    updateReviewsAndDebug();
-  }, []);
+  useEffect(() => {
+    if (variant.images instanceof Array && variant.images.length > 0) {
+      setImage(variant.images[0].url);
+    }
+  }, [variant]);
 
-  const images = [];
-
-  if (prodInfo.images instanceof Array) {
-    prodInfo.images.forEach((image) => {
-      const item = {
-        original: image.url,
-        thumbnail: image.url,
-      };
-
-      images.push(item);
-    });
-  }
+  console.log(image);
 
   const handleNumberChange = (e) => {
     const value = e.target.value.replace(/[e\+\-]/gi, '1');
@@ -124,10 +109,8 @@ export default function ProductPage(props) {
         type: 'CART_ADD_ITEM',
         payload: {
           ...product[0],
-          img:
-            product[0].images &&
-            product[0].images[0] &&
-            product[0].images[0].url,
+          variant,
+          img: image,
           quantity: 1,
         },
       });
@@ -135,11 +118,8 @@ export default function ProductPage(props) {
       dispatch({
         type: 'CART_ADD_ITEM',
         payload: {
-          ...product[0],
-          img:
-            product[0].images &&
-            product[0].images[0] &&
-            product[0].images[0].url,
+          ...variant,
+          img: image,
           quantity: amount,
         },
       });
@@ -150,332 +130,206 @@ export default function ProductPage(props) {
 
   return (
     <Layout title={prodInfo.name} description={prodInfo.description}>
-      <Grid
-        container
-        direction="column"
-        sx={{ marginTop: '0rem' }}
-        spacing={10}
-      >
-        <Grid item>
-          <Message
-            text={`Added ${prodInfo.name} to the bag!`}
-            severity="success"
-            open={openMessage}
-            setOpen={setOpenMessage}
-          />
-        </Grid>
-        <Grid item>
-          {/* Product */}
-          <Grid container justifyContent="space-evenly" spacing={3}>
-            <Grid item>
-              <Grid container direction="column" spacing={4}>
-                <Grid item>
-                  <ImageGallery
-                    items={images}
-                    showFullscreenButton={false}
-                    showPlayButton={false}
-                    thumbnailPosition={'left'}
-                  />
-                </Grid>
-
-                <Grid item>
-                  <Grid container justifyContent="space-evenly" spacing={4}>
-                    <Grid item>
-                      {prodInfo.tags && prodInfo.tags.coconut ? (
-                        <Grid container direction="column">
-                          <Grid item>
-                            <IconButton>
-                              <Image src={Coconut} height={64} width={64} />
-                            </IconButton>
-                          </Grid>
-
-                          <Grid item>
-                            <Typography variant="body2">
-                              Coconut based
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      ) : (
-                        <></>
-                      )}
-                    </Grid>
-
-                    <Grid item>
-                      {prodInfo.tags && prodInfo.tags.eco ? (
-                        <Grid container direction="column" alignItems="center">
-                          <Grid item>
-                            <IconButton>
-                              <Image src={Eco} height={64} width={64} />
-                            </IconButton>
-                          </Grid>
-
-                          <Grid item>
-                            <Typography variant="body2">
-                              Eco-friendly
-                            </Typography>
-                          </Grid>
-                        </Grid>
-                      ) : (
-                        <></>
-                      )}
-                    </Grid>
-                  </Grid>
-
-                  {/* tags */}
-                </Grid>
-              </Grid>
-            </Grid>
-
-            <Grid item xs={10} lg={5}>
-              <Grid container direction="column" spacing={3}>
-                <Grid item>
-                  <Typography variant="h4">{prodInfo.name}</Typography>
-                </Grid>
-
-                <Grid item container alignItems="center" spacing={3}>
-                  <Grid item>
-                    <Rating precision={0.5} value={prodInfo.rating} readOnly />
-                  </Grid>
-                  <Grid item>
-                    <Typography>
-                      ({prodInfo.noofreviews ? prodInfo.noofreviews : 0}{' '}
-                      reviews)
-                    </Typography>
-                  </Grid>
-                </Grid>
-
-                <Grid item>
-                  <Typography
-                    variant="h5"
-                    sx={(theme) => ({
-                      color: theme.palette.common.black,
-                      fontSize: '2.0rem',
-                      fontFamily: 'Montserrat',
-                      fontWeight: '600',
-                    })}
-                  >
-                    ${prodInfo.price ? prodInfo.price.toFixed(2) : '0.00'}
-                  </Typography>
-                </Grid>
-
-                {matchesMD ? (
-                  <></>
-                ) : (
-                  <>
-                    <Grid item container alignItems="center" spacing={3}>
-                      <Grid item>
-                        <Typography
-                          sx={{ fontSize: '1rem', fontWeight: '700' }}
-                        >
-                          Qty:
-                        </Typography>
-                      </Grid>
-
-                      <Grid item>
-                        <Grid container alignItems="center">
-                          <Grid item>
-                            <IconButton
-                              onClick={handleDownAmount}
-                              color="primary"
-                              aria-label="increase quantity"
-                              component="span"
-                            >
-                              <ArrowCircleDownTwoToneIcon
-                                sx={(theme) => ({
-                                  color: theme.palette.common.lightRed,
-                                  fontSize: '2rem',
-                                })}
-                              />
-                            </IconButton>
-                          </Grid>
-
-                          <Grid item>
-                            <TextField
-                              onChange={handleNumberChange}
-                              value={amount}
-                              variant="outlined"
-                              type="number"
-                              size="small"
-                              sx={{
-                                width: '11ch',
-                                'input::-webkit-inner-spin-button': {
-                                  '-webkit-appearance': 'none',
-                                  margin: 0,
-                                },
-
-                                'input[type=number]': {
-                                  '-moz-appearance': 'textfield',
-                                  'font-size': '1.2rem',
-                                  'text-align': 'center',
-                                  color: '#3a8783',
-                                },
-                              }}
-                            />
-                          </Grid>
-
-                          <Grid item>
-                            <IconButton
-                              onClick={handleAddAmount}
-                              color="primary"
-                              aria-label="decrease quantity"
-                              component="span"
-                            >
-                              <ArrowCircleUpTwoToneIcon
-                                sx={(theme) => ({
-                                  fontSize: '2rem',
-                                })}
-                              />
-                            </IconButton>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-
-                      <Grid item>
-                        <Button
-                          onClick={handleAddToCart}
-                          startIcon={<LocalMallTwoToneIcon />}
-                          variant="contained"
-                        >
-                          Add to bag
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </>
-                )}
-
-                <Grid item>
-                  <Typography
-                    align="center"
-                    paragraph
-                    variant="body2"
-                    sx={(theme) => ({
-                      fontSize: '1.3rem',
-                      color: theme.palette.common.lightGray,
-                    })}
-                  >
-                    {prodInfo.description}
-                  </Typography>
-                </Grid>
-
-                {prodInfo.description2 ? (
-                  <Grid item>
-                    <Typography
-                      align="center"
-                      paragraph
-                      variant="body2"
-                      sx={(theme) => ({
-                        fontSize: '1.3rem',
-                        color: theme.palette.common.lightGray,
-                      })}
-                    >
-                      {prodInfo.description2}
-                    </Typography>
-                  </Grid>
-                ) : (
-                  <></>
-                )}
-
-                {prodInfo.quotes instanceof Array ? (
-                  <Grid item>
-                    <Grid container direction="column" spacing={2}>
-                      {prodInfo.quotes.map((quote) => (
-                        <>
-                          <Grid item>
-                            <Typography
-                              sx={(theme) => ({
-                                fontFamily: 'Montserrat',
-                                fontSize: '1.4rem',
-                                color: theme.palette.common.lightGray,
-                              })}
-                              align={quote.left ? 'left' : 'right'}
-                            >
-                              {quote.text}
-                            </Typography>
-                          </Grid>
-                          <Grid item>
-                            <Typography
-                              sx={(theme) => ({
-                                fontFamily: 'Montserrat',
-                                fontSize: '1.4rem',
-                                fontWeight: '600',
-                                color: theme.palette.common.lightGray,
-                              })}
-                              align={quote.left ? 'left' : 'right'}
-                            >
-                              -{quote.author}-
-                            </Typography>
-                          </Grid>
-                        </>
-                      ))}
-                    </Grid>
-                  </Grid>
-                ) : (
-                  <></>
-                )}
-
-                {prodInfo.alert ? (
-                  <Grid item>
-                    <Alert variant="standard" severity={prodInfo.alert.type}>
-                      {prodInfo.alert.text}
-                    </Alert>
-                  </Grid>
-                ) : (
-                  <></>
-                )}
-
-                <Grid item>
-                  {product instanceof Array ? (
-                    <InfoTable product={product[0]} />
-                  ) : (
-                    <></>
-                  )}
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-
+      <Grid container justifyContent="space-evenly" spacing={4}>
+        {/* image */}
         <Grid
           item
-          container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={10}
+          sx={{
+            marginBottom: '2rem',
+            marginTop: '2rem',
+          }}
         >
-          <Grid item>
-            <Button
-              sx={{ fontSize: '1.2rem', fontFamily: 'Montserrat' }}
-              endIcon={
-                showRelated ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />
-              }
-              onClick={(e) => {
-                setShowRelated(!showRelated);
-              }}
-            >
-              {showRelated ? 'Hide' : 'Show'} Related products
-            </Button>
-          </Grid>
+          {image !== '' ? (
+            <Image
+              width={matchesMD ? 300 : 600}
+              height={matchesMD ? 300 : 600}
+              src={image}
+            />
+          ) : (
+            <></>
+          )}
+        </Grid>
 
-          <Grid item>
-            <Collapse in={showRelated}>
-              <Grid container justifyContent="space-evenly" spacing={10}>
-                {prodInfo.products instanceof Array &&
-                  prodInfo.products.map((prod) => {
-                    return (
-                      <Grid item key={prod.id}>
-                        <SmallProductCard product={prod} />
-                      </Grid>
-                    );
-                  })}
+        {/* details */}
+        <Grid item>
+          <Grid container direction="column" spacing={6}>
+            {/* varient */}
+            <Grid item>
+              <Typography variant="h4" sx={{ marginBottom: '-1rem' }}>
+                Variants:
+              </Typography>
+            </Grid>
+            <Grid item>
+              <VariantGrid
+                variant={variant}
+                setVariant={setVariant}
+                product={product}
+              />
+            </Grid>
+
+            {/* name */}
+            <Grid item>
+              <Typography variant="h3">{variant.name}</Typography>
+            </Grid>
+            {/* price */}
+
+            {variant.sale ? (
+              <Grid item container alignItems="center" spacing={4}>
+                <Grid item>
+                  <Typography
+                    variant="h3"
+                    sx={{ textDecoration: 'line-through', fontSize: '1.5rem' }}
+                  >
+                    NZ${' '}
+                    {variant && variant.highPrice
+                      ? variant.highPrice.toFixed(2)
+                      : '0.00'}
+                  </Typography>
+                </Grid>
+
+                <Grid item>
+                  <Typography
+                    variant="h3"
+                    sx={{
+                      fontWeight: '600',
+                      fontSize: '1.5rem',
+                    }}
+                  >
+                    NZ${' '}
+                    {variant && variant.lowPrice
+                      ? variant.lowPrice.toFixed(2)
+                      : '0.00'}
+                  </Typography>
+                </Grid>
               </Grid>
-            </Collapse>
+            ) : (
+              <Grid item>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontWeight: '600',
+                    fontSize: '1.5rem',
+                  }}
+                >
+                  NZ${' '}
+                  {variant && variant.highPrice
+                    ? variant.highPrice.toFixed(2)
+                    : '0.00'}
+                </Typography>
+              </Grid>
+            )}
+
+            {/* desc */}
+            <Grid item sx={{ marginTop: '2rem' }}>
+              <Typography variant="h6">{prodInfo.description}</Typography>
+            </Grid>
+
+            {/* add to cart */}
+            {matchesMD ? (
+              <></>
+            ) : (
+              <>
+                <Grid item container alignItems="center" spacing={3}>
+                  <Grid item>
+                    <Typography sx={{ fontSize: '1rem', fontWeight: '700' }}>
+                      Qty:
+                    </Typography>
+                  </Grid>
+
+                  <Grid item>
+                    <Grid container alignItems="center">
+                      <Grid item>
+                        <IconButton
+                          onClick={handleDownAmount}
+                          color="primary"
+                          aria-label="increase quantity"
+                          component="span"
+                        >
+                          <ArrowCircleDownTwoToneIcon
+                            sx={(theme) => ({
+                              color: theme.palette.common.lightRed,
+                              fontSize: '2rem',
+                            })}
+                          />
+                        </IconButton>
+                      </Grid>
+
+                      <Grid item>
+                        <TextField
+                          onChange={handleNumberChange}
+                          value={amount}
+                          variant="outlined"
+                          type="number"
+                          size="small"
+                          sx={{
+                            width: '11ch',
+                            'input::-webkit-inner-spin-button': {
+                              '-webkit-appearance': 'none',
+                              margin: 0,
+                            },
+
+                            'input[type=number]': {
+                              '-moz-appearance': 'textfield',
+                              'font-size': '1.2rem',
+                              'text-align': 'center',
+                              color: '#3a8783',
+                            },
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item>
+                        <IconButton
+                          onClick={handleAddAmount}
+                          color="primary"
+                          aria-label="decrease quantity"
+                          component="span"
+                        >
+                          <ArrowCircleUpTwoToneIcon
+                            sx={(theme) => ({
+                              fontSize: '2rem',
+                            })}
+                          />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+
+                  <Grid item>
+                    <Button
+                      onClick={handleAddToCart}
+                      startIcon={<LocalMallTwoToneIcon />}
+                      variant="contained"
+                    >
+                      Add to bag
+                    </Button>
+                  </Grid>
+                </Grid>
+              </>
+            )}
+
+            <Grid item>
+              <Returns />
+            </Grid>
           </Grid>
         </Grid>
+
+        <Grid item xs={12} />
 
         <Grid item>
-          <Reviews product={prodInfo} page={page} setPage={setPage} />
+          <Typography>You might also like:</Typography>
         </Grid>
+        <Grid item xs={12} />
+
+        <Grid item>{/* similar items */}</Grid>
+
+        <Grid item xs={12} />
+        <Grid item>
+          <Typography>Reviews:</Typography>
+        </Grid>
+
+        <Grid item xs={12} />
+        <Grid item>{/* Reviews */}</Grid>
       </Grid>
 
       <Box sx={{ display: { xs: 'block', md: 'none' } }}>
@@ -561,7 +415,7 @@ export default function ProductPage(props) {
 
 export async function getStaticPaths() {
   try {
-    const res = await fetch(process.env.STRAPI_BASE + `products`);
+    const res = await fetch(process.env.STRAPI_BASE + `dendels-products`);
     const products = await res.json();
 
     const names = [];
@@ -583,8 +437,11 @@ export async function getStaticProps(context) {
 
     var param = slug.toLowerCase();
 
-    const res = await fetch(process.env.STRAPI_BASE + `products?slug=${param}`);
+    const res = await fetch(
+      process.env.STRAPI_BASE + `dendels-products?slug=${param}`
+    );
     const product = await res.json();
+    // console.log(product);
 
     return {
       props: {

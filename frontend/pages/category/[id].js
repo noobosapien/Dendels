@@ -1,22 +1,16 @@
-import {
-  Card,
-  CardActions,
-  Grid,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import ProductCard from '../../components/common/ProductCard';
 import Layout from '../../components/Layout';
-import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
-import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import { getProducts } from '../../helpers/getProductsSort';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import { Collapse, Grid, Typography } from '@mui/material';
+import ProductCard from '../../components/common/ProductCard';
+import MobileMenu from '../../components/common/MobileMenu';
+import MenuPaper from '../../components/common/MenuPaper';
 
 export default function Category(props) {
+  const [openMenu, setOpenMenu] = useState(false);
+
   const { products, param } = props;
 
   const theme = useTheme();
@@ -30,6 +24,7 @@ export default function Category(props) {
 
   useEffect(() => {
     setAllProducts(products);
+    console.log(products);
   }, [products]);
 
   useEffect(() => {
@@ -48,121 +43,40 @@ export default function Category(props) {
   };
 
   return (
-    <Layout title="Dendels" description={'Dendels hand crafted and delivered'}>
+    <Layout title="Dendels" description={'Dendels'}>
       <Grid
         container
-        justifyContent="space-evenly"
-        alignItems="center"
-        spacing={10}
+        sx={{ marginTop: '2rem', marginBottom: '2rem' }}
         direction="column"
-        sx={(theme) => ({
-          marginTop: '0%',
-        })}
+        alignItems="center"
+        spacing={6}
       >
+        <Grid item container justifyContent="space-around">
+          <Grid item>
+            <Typography variant="h4">{param}</Typography>
+          </Grid>
+
+          <Grid item>
+            <MobileMenu setOpenMenu={setOpenMenu} />
+          </Grid>
+        </Grid>
+
         <Grid item>
-          <Typography
-            sx={{
-              fontSize: matchesMD ? '1.5rem' : '3rem',
-              fontFamily: 'Monoton',
-            }}
-          >
-            {param}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <Card variant="outlined">
-            <CardActions>
-              <Grid
-                container
-                direction="row"
-                spacing={{ xs: 1, sm: 2, md: 4 }}
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Grid item>
-                  <FilterAltIcon color="primary" />
-                </Grid>
-
-                <Grid item>
-                  <ToggleButtonGroup
-                    color="primary"
-                    value={sort.method}
-                    exclusive
-                  >
-                    <ToggleButton
-                      value="name"
-                      onClick={handleStateChange('name')}
-                    >
-                      A-Z
-                      {sort.method === 'name' ? (
-                        sort.asc ? (
-                          <ArrowCircleUpIcon />
-                        ) : (
-                          <ArrowCircleDownIcon />
-                        )
-                      ) : (
-                        ''
-                      )}
-                    </ToggleButton>
-                    <ToggleButton
-                      value="price"
-                      onClick={handleStateChange('price')}
-                    >
-                      Price
-                      {sort.method === 'price' ? (
-                        sort.asc ? (
-                          <ArrowCircleUpIcon />
-                        ) : (
-                          <ArrowCircleDownIcon />
-                        )
-                      ) : (
-                        ''
-                      )}
-                    </ToggleButton>
-                    <ToggleButton
-                      value="createdAt"
-                      onClick={handleStateChange('createdAt')}
-                    >
-                      Latest
-                      {sort.method === 'createdAt' ? (
-                        sort.asc ? (
-                          <ArrowCircleUpIcon />
-                        ) : (
-                          <ArrowCircleDownIcon />
-                        )
-                      ) : (
-                        ''
-                      )}
-                    </ToggleButton>
-                    <ToggleButton
-                      value="reviews"
-                      onClick={handleStateChange('reviews')}
-                    >
-                      Reviews
-                      {sort.method === 'reviews' ? (
-                        sort.asc ? (
-                          <ArrowCircleUpIcon />
-                        ) : (
-                          <ArrowCircleDownIcon />
-                        )
-                      ) : (
-                        ''
-                      )}
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-                </Grid>
-              </Grid>
-            </CardActions>
-          </Card>
+          <Collapse in={openMenu}>
+            <MenuPaper />
+          </Collapse>
         </Grid>
 
-        <Grid item container justifyContent="space-evenly" spacing={10}>
-          {allProducts &&
+        {/* Products */}
+        <Grid item container justifyContent="space-evenly">
+          {allProducts instanceof Array &&
             allProducts.map((prod) => {
               return (
-                <Grid item key={prod.id}>
-                  <ProductCard product={prod} />
-                </Grid>
+                <>
+                  <Grid item>
+                    <ProductCard product={prod} />
+                  </Grid>
+                </>
               );
             })}
         </Grid>
@@ -173,7 +87,7 @@ export default function Category(props) {
 
 export async function getStaticPaths() {
   try {
-    const res = await fetch(process.env.STRAPI_BASE + `categories`);
+    const res = await fetch(process.env.STRAPI_BASE + `dendels-categories`);
     const categories = await res.json();
 
     const names = [];
@@ -200,7 +114,7 @@ export async function getStaticProps(context) {
 
     const res = await fetch(
       process.env.STRAPI_BASE +
-        `products?category.name_contains=${param}&_sort=name:DESC`
+        `dendels-products?dendels_category.name_contains=${param}&_sort=name:DESC`
     );
 
     const products = await res.json();

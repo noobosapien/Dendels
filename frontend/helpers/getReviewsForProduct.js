@@ -23,7 +23,7 @@ export async function getReviewsForProduct(id, page, sort) {
     }
 
     const { data } = await axios.get(
-      `https://cms.dendels.com/reviews?product=${id}&_start=${
+      `https://cms.puppetinos.com/reviews?product=${id}&_start=${
         (page - 1) * 3
       }&_limit=3&_sort=${param}`
     );
