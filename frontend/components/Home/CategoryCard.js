@@ -4,17 +4,15 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Button, CardActionArea, CardActions } from '@mui/material';
+import { useRouter } from 'next/router';
 
-export default function CategoryCard({ imgSrc, text }) {
+export default function CategoryCard({ imgSrc, text, slug }) {
+  const router = useRouter();
+
   return (
     <Card sx={{ width: 240, height: 200 }}>
-      <CardActionArea>
-        <CardMedia
-          component="img"
-          height="140"
-          image={imgSrc}
-          alt="green iguana"
-        />
+      <CardActionArea onClick={() => router.push(`/category/${slug}`)}>
+        <CardMedia component="img" height="140" image={imgSrc} alt="items" />
         <CardContent>
           <Typography
             textAlign="center"

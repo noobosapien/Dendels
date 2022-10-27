@@ -398,7 +398,6 @@ export default function Checkout() {
                     '& 	.MuiCardHeader-title': {
                       fontFamily: 'Montserrat',
                       fontSize: '1rem',
-                      color: theme.palette.common.greenBlue,
                     },
                   })}
                 />
@@ -427,7 +426,6 @@ export default function Checkout() {
                     '& 	.MuiCardHeader-title': {
                       fontFamily: 'Montserrat',
                       fontSize: '1rem',
-                      color: theme.palette.common.greenBlue,
                     },
                   })}
                 />

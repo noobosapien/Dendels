@@ -8,8 +8,6 @@ import {
 import React from 'react';
 
 export default function VariantGrid({ variant, setVariant, product }) {
-  console.log(variant);
-
   const variantClicked = (vari) => (e) => {
     setVariant(vari);
   };

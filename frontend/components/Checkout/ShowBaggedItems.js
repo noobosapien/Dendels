@@ -110,7 +110,7 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
             <List
               sx={{
                 width: '100%',
-                bgcolor: 'background.paper',
+                // bgcolor: 'background.paper',
                 zIndex: 0,
               }}
             >
@@ -120,7 +120,10 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
                       <ListItem
                         secondaryAction={
                           <Typography sx={{ fontSize: '1.5rem' }}>
-                            ${(item.price * item.quantity).toFixed(2)}
+                            $
+                            {item.sale
+                              ? (item.lowPrice * item.quantity).toFixed(2)
+                              : (item.highPrice * item.quantity).toFixed(2)}
                           </Typography>
                         }
                       >
@@ -138,7 +141,11 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
                         </ListItemAvatar>
                         <ListItemText
                           primary={item.name}
-                          secondary={`Each: $${item.price.toFixed(2)}`}
+                          secondary={
+                            item.sale
+                              ? `Each: $${item.lowPrice.toFixed(2)}`
+                              : `Each: $${item.highPrice.toFixed(2)}`
+                          }
                         />
                       </ListItem>
                       <Divider variant="inset" component="li" />
@@ -149,7 +156,10 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
                       <ListItem
                         secondaryAction={
                           <Typography sx={{ fontSize: '1.5rem' }}>
-                            ${(item.price * item.quantity).toFixed(2)}
+                            $
+                            {item.sale
+                              ? (item.lowPrice * item.quantity).toFixed(2)
+                              : (item.highPrice * item.quantity).toFixed(2)}
                           </Typography>
                         }
                       >
@@ -167,7 +177,11 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
                         </ListItemAvatar>
                         <ListItemText
                           primary={item.name}
-                          secondary={`Each: $${item.price.toFixed(2)}`}
+                          secondary={
+                            item.sale
+                              ? `Each: $${item.lowPrice.toFixed(2)}`
+                              : `Each: $${item.highPrice.toFixed(2)}`
+                          }
                         />
                       </ListItem>
                       <Divider variant="inset" component="li" />
@@ -183,10 +197,6 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
           variant="outlined"
           sx={(theme) => ({
             padding: '1rem',
-            background:
-              shipping || order
-                ? theme.palette.common.white
-                : theme.palette.common.darkGray,
           })}
         >
           <Typography
@@ -194,17 +204,17 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
             sx={(theme) => ({
               fontFamily: 'Montserrat',
               fontSize: shipping ? '1.2rem' : '1.4rem',
-              color:
-                shipping || order
-                  ? theme.palette.common.black
-                  : theme.palette.common.white,
             })}
           >
             Subtotal: $
             {order && orderSTotal
               ? orderSTotal.toFixed(2)
               : cartItems
-                  .reduce((a, c) => a + c.quantity * c.price, 0)
+                  .reduce(
+                    (a, c) =>
+                      a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
+                    0
+                  )
                   .toFixed(2)}
           </Typography>
         </Paper>
@@ -215,11 +225,7 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
           <Grid item alignSelf="center">
             <Grid container spacing={2}>
               <Grid item>
-                <DirectionsBoatFilledOutlinedIcon
-                  sx={(theme) => ({
-                    color: theme.palette.common.black,
-                  })}
-                />
+                <DirectionsBoatFilledOutlinedIcon sx={(theme) => ({})} />
               </Grid>
               <Grid item>
                 <Typography variant="body2">
@@ -249,15 +255,17 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
                 variant="h5"
                 sx={(theme) => ({
                   fontFamily: 'Montserrat',
-                  color: theme.palette.common.white,
                 })}
               >
                 Total: $
                 {order && orderTotal
                   ? orderTotal.toFixed(2)
                   : (
-                      cartItems.reduce((a, c) => a + c.quantity * c.price, 0) +
-                      (shipping === 'standard' ? 5 : 20)
+                      cartItems.reduce(
+                        (a, c) =>
+                          a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
+                        0
+                      ) + (shipping === 'standard' ? 5 : 20)
                     ).toFixed(2)}
               </Typography>
             </Paper>

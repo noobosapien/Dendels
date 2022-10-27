@@ -3,8 +3,8 @@ import axios from 'axios';
 export async function processOrder(details) {
   try {
     const { data } = await axios.post(
-      `https://cms.puppetinos.com/orders/process`,
-      // `http://localhost:1337/orders/process`,
+      // `https://cms.puppetinos.com/dendels-orders/process`,
+      `http://localhost:1337/dendels-orders/process`,
       details
     );
     return data;

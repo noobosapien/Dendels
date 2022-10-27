@@ -82,7 +82,7 @@ function Cart() {
             <Grid item alignItems="space-evenly">
               <Grid item container direction="column" spacing={5}>
                 {cartItems.map((item) => (
-                  <Grid item>
+                  <Grid item key={item._id}>
                     <BaggedItem
                       item={item}
                       removeItemHandler={removeItemHandler(item)}

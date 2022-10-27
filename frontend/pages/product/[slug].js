@@ -73,7 +73,7 @@ export default function ProductPage(props) {
   const prodInfo = product instanceof Array && product.length ? product[0] : {};
 
   useEffect(() => {
-    // console.log(product[0]);
+    // console.log('related product: ', product[0]);
     if (
       product[0].dendels_variants instanceof Array &&
       product[0].dendels_variants.length > 0
@@ -87,8 +87,6 @@ export default function ProductPage(props) {
       setImage(variant.images[0].url);
     }
   }, [variant]);
-
-  console.log(image);
 
   const handleNumberChange = (e) => {
     const value = e.target.value.replace(/[e\+\-]/gi, '1');
@@ -321,15 +319,42 @@ export default function ProductPage(props) {
         </Grid>
         <Grid item xs={12} />
 
-        <Grid item>{/* similar items */}</Grid>
+        <Grid item container>
+          {/* similar items */}
+          {product instanceof Array &&
+          product[0].dendels_products instanceof Array &&
+          product[0].dendels_products.length > 0 ? (
+            product[0].dendels_products.map((prod) => (
+              <Grid item>
+                <SmallProductCard product={prod} />
+              </Grid>
+            ))
+          ) : (
+            <></>
+          )}
+
+          {product instanceof Array &&
+          product[0].related_products instanceof Array &&
+          product[0].related_products.length > 0 ? (
+            product[0].related_products.map((prod) => (
+              <Grid item>
+                <SmallProductCard product={prod} />
+              </Grid>
+            ))
+          ) : (
+            <></>
+          )}
+        </Grid>
 
         <Grid item xs={12} />
-        <Grid item>
+        {/* <Grid item>
           <Typography>Reviews:</Typography>
         </Grid>
 
         <Grid item xs={12} />
-        <Grid item>{/* Reviews */}</Grid>
+        <Grid item>
+          <Reviews product={product[0]} />
+        </Grid> */}
       </Grid>
 
       <Box sx={{ display: { xs: 'block', md: 'none' } }}>

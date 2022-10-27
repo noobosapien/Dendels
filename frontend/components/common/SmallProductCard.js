@@ -1,6 +1,7 @@
 import {
   Card,
   CardActionArea,
+  CardContent,
   CardMedia,
   Grid,
   Rating,
@@ -12,50 +13,28 @@ import Image from 'next/image';
 
 export default function SmallProductCard({ product, noReviews }) {
   const router = useRouter();
+  // console.log('Product: ', product);
+  const goToProduct = () => {
+    router.push(`/product/${product.slug}`);
+  };
 
   return (
-    <Grid container direction="column" alignItems="center">
-      <Grid item>
-        <Card sx={{ width: '120px' }}>
-          <CardActionArea
-            onClick={(e) => {
-              router.push(`/product/${product.slug}`);
-            }}
-          >
-            <CardMedia
-              component="img"
-              alt={product.name}
-              image={product.images instanceof Array && product.images[0].url}
-              height="140"
-            />
-          </CardActionArea>
-        </Card>
-      </Grid>
-
-      {noReviews ? (
-        <></>
-      ) : (
-        <Grid
-          item
-          container
-          alignItems="center"
-          justifyContent="center"
-          direction="column"
-        >
-          <Grid item>
-            <Rating value={product.rating} readOnly />
-          </Grid>
-          <Grid item>
-            <Typography>
-              ({product.noofreviews ? product.noofreviews : 0} reviews)
+    <>
+      <Card sx={{ width: 140 }}>
+        <CardActionArea onClick={goToProduct}>
+          <CardMedia
+            component="img"
+            height="140"
+            image={product.image.url}
+            alt={product.name}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {product.name}
             </Typography>
-          </Grid>
-        </Grid>
-      )}
-
-      <Grid item alignSelf="center">
-        <Typography variant="body2">{product.name}</Typography>
-      </Grid>
-    </Grid>
+          </CardContent>
+        </CardActionArea>
+      </Card>
+    </>
   );
 }

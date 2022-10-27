@@ -58,8 +58,7 @@ const NavButton = styled(IconButton)(({ theme }) => ({
   // [theme.breakpoints.up('lg')]: {
   //   width: '32px !important',
   // },
-
-  top: '1rem',
+  // top: '1rem',
 }));
 
 export default function Layout({ title, description, children }) {
@@ -93,20 +92,21 @@ export default function Layout({ title, description, children }) {
             }}
           >
             <Grid item>
-              <NextLink href="/" passHref>
-                <>
-                  <Typography
-                    variant="h3"
-                    sx={{
-                      fontWeight: '200',
-                      cursor: 'pointer',
-                    }}
-                    color="primary"
-                  >
-                    Dendels
-                  </Typography>
-                </>
-              </NextLink>
+              {/* <NextLink href="/"> */}
+              <>
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontWeight: '200',
+                    cursor: 'pointer',
+                  }}
+                  color="primary"
+                  onClick={(e) => router.push('/')}
+                >
+                  Dendels
+                </Typography>
+              </>
+              {/* </NextLink> */}
             </Grid>
 
             <Grid item>
@@ -187,7 +187,7 @@ export default function Layout({ title, description, children }) {
         style={{
           backgroundColor: '#fff',
           // marginTop: '15%',
-          // paddingTop: '4rem',
+          paddingTop: '4rem',
           paddingBottom: '4rem',
         }}
       >

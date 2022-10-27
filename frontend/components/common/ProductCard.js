@@ -46,10 +46,10 @@ export default function ProductCard({ product }) {
   useEffect(() => {
     const updateReviews = async () => {
       const info = await getProductInfo(prod.id);
-      prod.noOfReviews =
-        info instanceof Array && info[0].noofreviews ? info[0].noofreviews : 0;
-      prod.rating =
-        info instanceof Array && info[0].rating ? info[0].rating : 0;
+      // prod.noOfReviews =
+      //   info instanceof Array && info[0].noofreviews ? info[0].noofreviews : 0;
+      // prod.rating =
+      //   info instanceof Array && info[0].rating ? info[0].rating : 0;
 
       setUpdate(update + 1);
     };

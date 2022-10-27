@@ -278,8 +278,10 @@ export default function PaymentCard({ loading, setLoading }) {
     const sendOrder = async () => {
       try {
         const total = (
-          cartItems.reduce((a, c) => a + c.quantity * c.price, 0) +
-          (shippingMethod.value === 'standard' ? 5 : 20)
+          cartItems.reduce(
+            (a, c) => a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
+            0
+          ) + (shippingMethod.value === 'standard' ? 5 : 20)
         ).toFixed(2);
 
         const result = await processOrder({
@@ -296,6 +298,8 @@ export default function PaymentCard({ loading, setLoading }) {
           idempotencyKey,
           shippingAddress,
         });
+
+        console.log(result);
 
         if (result.client_secret) {
           setClientSecret(result.client_secret);
@@ -430,6 +434,7 @@ export default function PaymentCard({ loading, setLoading }) {
           idempotencyKey,
         }
       );
+      console.log('Result after payment: ', result);
     }
 
     if (result.error) {
@@ -451,12 +456,17 @@ export default function PaymentCard({ loading, setLoading }) {
 
       try {
         const total = (
-          cartItems.reduce((a, c) => a + c.quantity * c.price, 0) +
-          (shippingMethod.value === 'standard' ? 5 : 20)
+          cartItems.reduce(
+            (a, c) => a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
+            0
+          ) + (shippingMethod.value === 'standard' ? 5 : 20)
         ).toFixed(2);
 
         const subtotal = cartItems
-          .reduce((a, c) => a + c.quantity * c.price, 0)
+          .reduce(
+            (a, c) => a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
+            0
+          )
           .toFixed(2);
 
         const country = countries.filter(
@@ -662,8 +672,11 @@ export default function PaymentCard({ loading, setLoading }) {
                 <CircularProgress color="primary" size="1.5rem" />
               ) : (
                 `Pay $${(
-                  cartItems.reduce((a, c) => a + c.quantity * c.price, 0) +
-                  (shippingMethod.value === 'standard' ? 5 : 20)
+                  cartItems.reduce(
+                    (a, c) =>
+                      a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
+                    0
+                  ) + (shippingMethod.value === 'standard' ? 5 : 20)
                 ).toFixed(2)}`
               )}
             </Button>

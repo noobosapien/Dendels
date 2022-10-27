@@ -13,8 +13,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import PaymentCard from '../components/Payment/PaymentCard';
 
 const stripePromise = loadStripe(
-  process.env.STRIPE_PK ||
-    'pk_live_51L4Gd3BSJ7dDFv5v7rsHZkc6DowDweOvAB96FvWBMjo0Ab1Tc67w9vnADCmkAYO5IgPzbfzQSI38Xd6fdlthYocH00nSrcgp2y'
+  'pk_test_51LxN8jA2zx4WKMEf8lGT5U1pn1qYbM3vEW9JehjXQqlvJOB7g9H00pH4jUMOKVOxDvzUYDek0x4e48O4Lv4w5rkW00JKDuOMRY'
 );
 
 export default function Checkout() {

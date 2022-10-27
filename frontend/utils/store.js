@@ -74,6 +74,12 @@ function reducer(state, action) {
         : [...state.cart.cartItems, newItem];
 
       Cookies.set('cartItems', JSON.stringify(cartItems));
+      console.log(
+        'Cookies: ',
+        Cookies.get('cartItems') ? JSON.parse(Cookies.get('cartItems')) : []
+      );
+
+      console.log(cartItems);
 
       return { ...state, cart: { ...state.cart, cartItems } };
     }
@@ -97,6 +103,12 @@ function reducer(state, action) {
         (item) => item.id !== action.payload.id
       );
       Cookies.set('cartItems', JSON.stringify(cartItems));
+
+      console.log(
+        'Cookies: ',
+        Cookies.get('cartItems') ? JSON.parse(Cookies.get('cartItems')) : []
+      );
+
       return { ...state, cart: { cartItems: [...cartItems] } };
     }
 

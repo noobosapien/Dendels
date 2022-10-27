@@ -16,16 +16,25 @@ export default function Categories() {
         <Grid item container justifyContent="space-evenly" spacing={4}>
           {/* category links */}
           <Grid item>
-            <CategoryCard imgSrc={Accesories.src} text={'Accesories'} />
+            <CategoryCard
+              imgSrc={Accesories.src}
+              text={'Accesories'}
+              slug={'accesories'}
+            />
           </Grid>
           <Grid item>
             <CategoryCard
               imgSrc={Straightners.src}
               text={'Hair Straightners'}
+              slug={'straightners'}
             />
           </Grid>
           <Grid item>
-            <CategoryCard imgSrc={HairRemoval.src} text={'Hair Removal'} />
+            <CategoryCard
+              imgSrc={HairRemoval.src}
+              text={'Hair Removal'}
+              slug="removal"
+            />
           </Grid>
         </Grid>
       </Grid>
