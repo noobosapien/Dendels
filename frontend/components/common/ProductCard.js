@@ -13,6 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
+import Image from 'next/image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
@@ -21,11 +22,15 @@ import { useRouter } from 'next/router';
 import { Store } from '../../utils/store';
 import { getProductInfo } from '../../helpers/getProductInfo';
 import Message from './Message';
+import CardBG from '../../public/cardbg.png';
 
 export default function ProductCard({ product }) {
   const { state, dispatch } = useContext(Store);
   const [update, setUpdate] = useState(1);
   const [openMessage, setOpenMessage] = useState(false);
+  const [sale, setSale] = useState(false);
+  const [highPrice, setHighPrice] = useState(0);
+  const [lowPrice, setLowPrice] = useState(0);
 
   const router = useRouter();
 
@@ -35,7 +40,6 @@ export default function ProductCard({ product }) {
     prod.id = product.id ? product.id : '';
     prod.img = product.image && product.image ? product.image.url : '';
     prod.name = product.name ? product.name : 'Name';
-    prod.price = product.lowPrice ? product.lowPrice : '0';
     prod.slug = product.slug ? product.slug : '';
     prod.noOfReviews = product.noofreviews ? product.noofreviews : 0;
     prod.rating = product.rating ? product.rating : 0;
@@ -43,18 +47,37 @@ export default function ProductCard({ product }) {
     prod.stock = product.stock ? Number(product.stock) : 0;
   }
 
-  useEffect(() => {
-    const updateReviews = async () => {
-      const info = await getProductInfo(prod.id);
-      // prod.noOfReviews =
-      //   info instanceof Array && info[0].noofreviews ? info[0].noofreviews : 0;
-      // prod.rating =
-      //   info instanceof Array && info[0].rating ? info[0].rating : 0;
+  // console.log(product);
 
-      setUpdate(update + 1);
-    };
-    updateReviews();
-  }, []);
+  useEffect(() => {
+    product && product.dendels_variants instanceof Array
+      ? setLowPrice(product.dendels_variants[0].highPrice)
+      : setLowPrice(50000);
+
+    product && product.dendels_variants instanceof Array
+      ? product.dendels_variants.forEach((variant) => {
+          if (variant.sale) {
+            setSale(true);
+
+            if (variant.lowPrice < lowPrice) {
+              setLowPrice(variant.lowPrice);
+            }
+
+            if (variant.lowPrice > highPrice) {
+              setHighPrice(variant.lowPrice);
+            }
+          } else {
+            if (variant.highPrice < lowPrice) {
+              setLowPrice(variant.highPrice);
+            }
+
+            if (variant.highPrice > highPrice) {
+              setHighPrice(variant.highPrice);
+            }
+          }
+        })
+      : undefined;
+  }, [product]);
 
   const theme = useTheme();
 
@@ -65,16 +88,16 @@ export default function ProductCard({ product }) {
   const matchesXL = useMediaQuery(theme.breakpoints.down('xl'));
 
   const imgWidth = matchesXS
-    ? '10rem'
+    ? '20rem'
     : matchesSM
-    ? '15rem'
+    ? '20rem'
     : matchesMD
     ? '20rem'
     : matchesLG
-    ? '25rem'
+    ? '20rem'
     : matchesXL
-    ? '25rem'
-    : '25rem';
+    ? '20rem'
+    : '20rem';
 
   const ImageButton = styled(Fab)(({ theme }) => ({
     // borderRadius: '50px',
@@ -84,24 +107,31 @@ export default function ProductCard({ product }) {
     router.push(`/product/${slug}`);
   };
 
-  const handleAddToCart = async (e) => {
-    const existItem = state.cart.cartItems.find((x) => x.id === product.id);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
-
-    dispatch({
-      type: 'CART_ADD_ITEM',
-      payload: { ...prod, quantity },
-    });
-
-    setOpenMessage(true);
-  };
-
   return (
-    <Grid container justifyContent="center">
+    <Grid
+      container
+      justifyContent="center"
+      direction="column"
+      alignItems="center"
+    >
       <Grid item>
         <Card sx={{ width: imgWidth }} elevation={5}>
           <CardActionArea onClick={handleGotoProduct(prod.slug)}>
-            <CardMedia component="img" image={prod.img} alt="item" />
+            <Card
+              elevation={0}
+              sx={{
+                width: imgWidth,
+                background: `url(${CardBG.src})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+              }}
+            >
+              <Grid container justifyContent="center" alignItems="center">
+                <Grid item>
+                  <Image src={prod.img} alt="item" width={250} height={250} />
+                </Grid>
+              </Grid>
+            </Card>
 
             <CardContent>
               <Grid
@@ -109,17 +139,28 @@ export default function ProductCard({ product }) {
                 justifyContent="center"
                 direction="column"
                 alignItems="center"
+                spacing={4}
               >
                 <Grid item>
                   <Typography
                     variant="body2"
                     sx={(theme) => ({
-                      fontWeight: '300',
-                      fontSize: '1.0rem',
+                      fontWeight: '400',
+                      fontSize: '1.2rem',
                       color: theme.palette.common.lightGray,
                     })}
                   >
                     {prod.name}
+                  </Typography>
+                </Grid>
+
+                <Grid item>
+                  <Typography
+                    sx={{
+                      fontSize: '1.5rem',
+                    }}
+                  >
+                    ${lowPrice} ~ ${highPrice}
                   </Typography>
                 </Grid>
               </Grid>
@@ -127,6 +168,29 @@ export default function ProductCard({ product }) {
           </CardActionArea>
         </Card>
       </Grid>
+
+      {sale ? (
+        <Grid item>
+          <Card
+            sx={{
+              width: imgWidth,
+              paddingTop: '0.5rem',
+              paddingBottom: '0.5rem',
+              background:
+                'linear-gradient(125deg, rgba(234,11,160,1) 0%, rgba(234,11,160,0.7) 100%)',
+            }}
+          >
+            <Typography
+              textAlign={'center'}
+              sx={{ fontSize: '1.1rem', color: 'white' }}
+            >
+              Items On Sale!
+            </Typography>
+          </Card>
+        </Grid>
+      ) : (
+        <></>
+      )}
 
       <Grid item>
         <Message

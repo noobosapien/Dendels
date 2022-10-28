@@ -28,21 +28,21 @@ import { useRouter } from 'next/router';
 import { Store } from '../utils/store';
 import ContactForm from './common/ContactForm';
 
-const LogoButton = styled(Button)(({ theme }) => ({
+const LogoButton = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
-    width: '8rem !important',
+    fontSize: '2.5rem !important',
   },
   [theme.breakpoints.up('sm')]: {
-    width: '10rem !important',
+    fontSize: '2.5rem !important',
   },
   [theme.breakpoints.up('md')]: {
-    width: '18rem !important',
+    fontSize: '3rem !important',
   },
   [theme.breakpoints.up('lg')]: {
-    width: '24rem !important',
+    fontSize: '4rem !important',
   },
 
-  top: '1rem',
+  // top: '1rem',
 }));
 
 const NavButton = styled(IconButton)(({ theme }) => ({
@@ -94,7 +94,7 @@ export default function Layout({ title, description, children }) {
             <Grid item>
               {/* <NextLink href="/"> */}
               <>
-                <Typography
+                <LogoButton
                   variant="h3"
                   sx={{
                     fontWeight: '200',
@@ -104,7 +104,7 @@ export default function Layout({ title, description, children }) {
                   onClick={(e) => router.push('/')}
                 >
                   Dendels
-                </Typography>
+                </LogoButton>
               </>
               {/* </NextLink> */}
             </Grid>
@@ -122,7 +122,7 @@ export default function Layout({ title, description, children }) {
                           fontSize: '2.5rem',
                         },
                         [theme.breakpoints.down('sm')]: {
-                          fontSize: '1.5rem',
+                          fontSize: '2.0rem',
                         },
                       })}
                     />
@@ -151,7 +151,7 @@ export default function Layout({ title, description, children }) {
                               fontSize: '2.5rem',
                             },
                             [theme.breakpoints.down('sm')]: {
-                              fontSize: '1.5rem',
+                              fontSize: '2.0rem',
                             },
                           })}
                         />

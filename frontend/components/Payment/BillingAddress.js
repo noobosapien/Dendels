@@ -101,7 +101,7 @@ export default function BillingAddress({
           <ListItemIcon>
             <Radio checked={!diff} />
           </ListItemIcon>
-          <ListItemText id={'shipping'} primary={`Same as shpping address`} />
+          <ListItemText id={'shipping'} primary={`Same as shipping address`} />
         </ListItemButton>
       </ListItem>
 

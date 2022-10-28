@@ -128,24 +128,58 @@ export default function ProductPage(props) {
 
   return (
     <Layout title={prodInfo.name} description={prodInfo.description}>
-      <Grid container justifyContent="space-evenly" spacing={4}>
+      <Grid
+        container
+        justifyContent="space-evenly"
+        spacing={4}
+        sx={{
+          marginTop: '2rem',
+        }}
+      >
         {/* image */}
         <Grid
           item
           sx={{
             marginBottom: '2rem',
             marginTop: '2rem',
+            position: 'relative',
           }}
         >
+          <div
+            style={{
+              width: matchesMD ? 160 : 250,
+              height: matchesMD ? 160 : 250,
+              position: 'absolute',
+              background:
+                'linear-gradient(125deg, rgba(234,11,160,0.1) 0%, rgba(234,11,160,0.2) 100%)',
+              top: matchesMD ? '-2rem' : '-2rem',
+              left: matchesMD ? '-2rem' : '-2rem',
+              borderRadius: '70% 80% 50% 70%',
+            }}
+          ></div>
           {image !== '' ? (
             <Image
-              width={matchesMD ? 300 : 600}
-              height={matchesMD ? 300 : 600}
+              width={matchesMD ? 320 : 600}
+              height={matchesMD ? 320 : 600}
               src={image}
             />
           ) : (
             <></>
           )}
+
+          <div
+            style={{
+              width: matchesMD ? 260 : 400,
+              height: matchesMD ? 160 : 250,
+              position: 'absolute',
+              background:
+                'linear-gradient(125deg, rgba(255,217,112,0.1) 0%, rgba(255,217,112,0.2) 100%)',
+              top: matchesMD ? 230 : 430,
+              left: matchesMD ? 100 : 300,
+              borderRadius: '70% 90% 100% 70%',
+              zIndex: '-10',
+            }}
+          ></div>
         </Grid>
 
         {/* details */}
@@ -315,11 +349,19 @@ export default function ProductPage(props) {
         <Grid item xs={12} />
 
         <Grid item>
-          <Typography>You might also like:</Typography>
+          <Typography sx={{ fontSize: '1.2rem' }}>
+            You might also like:
+          </Typography>
         </Grid>
         <Grid item xs={12} />
 
-        <Grid item container>
+        <Grid
+          item
+          container
+          justifyContent="space-evenly"
+          alignItems="center"
+          spacing={10}
+        >
           {/* similar items */}
           {product instanceof Array &&
           product[0].dendels_products instanceof Array &&
@@ -360,8 +402,8 @@ export default function ProductPage(props) {
       <Box sx={{ display: { xs: 'block', md: 'none' } }}>
         <AppBar
           position="fixed"
-          color="primary"
-          sx={{ top: 'auto', bottom: 0 }}
+          // color="primary"
+          sx={{ top: 'auto', bottom: 0, background: 'rgba(248,99,198,0.95)' }}
         >
           <Toolbar>
             <Grid
@@ -400,7 +442,7 @@ export default function ProductPage(props) {
                         'input[type=number]': {
                           '-moz-appearance': 'textfield',
                           'font-size': '1.2rem',
-                          color: '#fff',
+                          color: '#523C0',
                           'text-align': 'center',
                         },
                       }}

@@ -68,7 +68,7 @@ export default function Category(props) {
         </Grid>
 
         {/* Products */}
-        <Grid item container justifyContent="space-evenly">
+        <Grid item container justifyContent="space-evenly" spacing={10}>
           {allProducts instanceof Array &&
             allProducts.map((prod) => {
               return (
