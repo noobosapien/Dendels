@@ -11,10 +11,12 @@ import MenuPaper from '../../components/common/MenuPaper';
 export default function Category(props) {
   const [openMenu, setOpenMenu] = useState(false);
 
-  const { products, param } = props;
+  const { products, category, param } = props;
 
   const theme = useTheme();
   const matchesMD = useMediaQuery(theme.breakpoints.down('md'));
+
+  const [allTypes, setAllTypes] = useState([]);
 
   const [allProducts, setAllProducts] = useState([]);
   const [sort, setSort] = useState({
@@ -22,24 +24,48 @@ export default function Category(props) {
     asc: true,
   });
 
+  const [featured, setFeatured] = useState(true);
+  const [sale, setSale] = useState(true);
+  const [promo, setPromo] = useState(true);
+
+  const [type, setType] = useState('All');
+
   useEffect(() => {
     setAllProducts(products);
     console.log(products);
   }, [products]);
 
-  useEffect(() => {
-    getProducts(sort, param, setAllProducts);
-  }, [sort]);
+  // console.log('Outside: ', category);
 
-  const handleStateChange = (method) => (e) => {
-    if (sort.method !== method) {
-      setSort({
-        method,
-        asc: true,
-      });
-    } else {
-      setSort({ ...sort, asc: !sort.asc });
+  useEffect(() => {
+    if (category && category.types) {
+      try {
+        const typesJSON = JSON.parse(category.types);
+        setAllTypes(['All', ...typesJSON]);
+      } catch (e) {
+        console.log(e);
+      }
     }
+  }, [category]);
+
+  useEffect(() => {
+    getProducts(sort, param, featured, sale, promo, type, setAllProducts);
+  }, [sort, param, featured, sale, promo, type]);
+
+  const handleSortChange = (value) => {
+    setSort(value);
+  };
+
+  const handleFeaturedChange = (value) => {
+    setFeatured(value);
+  };
+
+  const handleSaleChange = (value) => {
+    setSale(value);
+  };
+
+  const handlePromoChange = (value) => {
+    setPromo(value);
   };
 
   return (
@@ -63,7 +89,15 @@ export default function Category(props) {
 
         <Grid item>
           <Collapse in={openMenu}>
-            <MenuPaper />
+            <MenuPaper
+              handleSortChange={handleSortChange}
+              handleFeaturedChange={handleFeaturedChange}
+              handlePromoChange={handlePromoChange}
+              handleSaleChange={handleSaleChange}
+              allTypes={allTypes}
+              type={type}
+              setType={setType}
+            />
           </Collapse>
         </Grid>
 
@@ -119,10 +153,17 @@ export async function getStaticProps(context) {
 
     const products = await res.json();
 
+    const res2 = await fetch(
+      process.env.STRAPI_BASE + `dendels-categories?name_contains=${param}`
+    );
+
+    const cat = await res2.json();
+
     return {
       props: {
         products,
         param,
+        category: cat instanceof Array ? cat[0] : {},
       },
     };
   } catch (e) {

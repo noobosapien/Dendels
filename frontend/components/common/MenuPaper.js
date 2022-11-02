@@ -11,7 +11,15 @@ import MenuSort from './MenuSort';
 import SelectType from './SelectType';
 import ShowItemsCB from './ShowItemsCB';
 
-export default function MenuPaper() {
+export default function MenuPaper({
+  handleSortChange,
+  handleFeaturedChange,
+  handlePromoChange,
+  handleSaleChange,
+  allTypes,
+  type,
+  setType,
+}) {
   return (
     <>
       <Card
@@ -39,7 +47,7 @@ export default function MenuPaper() {
                 </Typography>
               </Grid>
               <Grid item>
-                <MenuSort />
+                <MenuSort handleSortChange={handleSortChange} />
               </Grid>
             </Grid>
 
@@ -59,7 +67,11 @@ export default function MenuPaper() {
               </Grid>
 
               <Grid item>
-                <ShowItemsCB />
+                <ShowItemsCB
+                  handleFeaturedChange={handleFeaturedChange}
+                  handlePromoChange={handlePromoChange}
+                  handleSaleChange={handleSaleChange}
+                />
               </Grid>
             </Grid>
 
@@ -79,7 +91,7 @@ export default function MenuPaper() {
               </Grid>
 
               <Grid item>
-                <SelectType />
+                <SelectType allTypes={allTypes} type={type} setType={setType} />
               </Grid>
             </Grid>
           </Grid>

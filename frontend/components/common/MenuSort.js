@@ -40,24 +40,89 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function MenuSort() {
-  const [age, setAge] = React.useState(10);
+export default function MenuSort({ handleSortChange }) {
+  const [sort, setSort] = React.useState('1');
+
+  React.useEffect(() => {
+    switch (sort) {
+      case '1': {
+        handleSortChange({
+          method: 'name',
+          asc: true,
+        });
+
+        break;
+      }
+
+      case '2': {
+        handleSortChange({
+          method: 'name',
+          asc: false,
+        });
+
+        break;
+      }
+
+      case '3': {
+        handleSortChange({
+          method: 'highestprice',
+          asc: true,
+        });
+        break;
+      }
+
+      case '4': {
+        handleSortChange({
+          method: 'highestprice',
+          asc: false,
+        });
+        break;
+      }
+
+      case '5': {
+        handleSortChange({
+          method: 'createdAt',
+          asc: true,
+        });
+
+        break;
+      }
+
+      case '6': {
+        handleSortChange({
+          method: 'createdAt',
+          asc: false,
+        });
+
+        break;
+      }
+
+      default: {
+        break;
+      }
+    }
+  }, [sort]);
+
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setSort(event.target.value);
   };
+
   return (
     <div>
       <FormControl sx={{}} variant="standard">
-        <InputLabel htmlFor="demo-customized-select-native">Age</InputLabel>
+        <InputLabel htmlFor="sort">Sort by</InputLabel>
         <NativeSelect
-          id="demo-customized-select-native"
-          value={age}
+          id="sort"
+          value={sort}
           onChange={handleChange}
           input={<BootstrapInput />}
         >
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
+          <option value={1}>A-Z</option>
+          <option value={2}>Z-A</option>
+          <option value={3}>Highest price</option>
+          <option value={4}>Lowest price</option>
+          <option value={5}>Latest</option>
+          <option value={6}>Oldest</option>
         </NativeSelect>
       </FormControl>
     </div>

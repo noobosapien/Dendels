@@ -40,24 +40,23 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SelectType() {
-  const [age, setAge] = React.useState(10);
+export default function SelectType({ allTypes, type, setType }) {
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setType(event.target.value);
   };
   return (
     <div>
       <FormControl sx={{}} variant="standard">
-        <InputLabel htmlFor="demo-customized-select-native">Age</InputLabel>
+        <InputLabel htmlFor="selectType">Type</InputLabel>
         <NativeSelect
-          id="demo-customized-select-native"
-          value={age}
+          id="selectType"
+          value={type}
           onChange={handleChange}
           input={<BootstrapInput />}
         >
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
+          {allTypes.map((ty) => (
+            <option value={ty}>{ty}</option>
+          ))}
         </NativeSelect>
       </FormControl>
     </div>
