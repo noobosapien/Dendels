@@ -11,8 +11,8 @@ export async function getProducts(
 ) {
   try {
     const { data } = await axios.get(
-      'http://localhost:1337/' +
-        // 'https://cms.puppetinos.com/' +
+      // 'http://localhost:1337/' +
+      'https://cms.puppetinos.com/' +
         `dendels-products?dendels_category.name_contains=${param}&_sort=${
           sort.method
         }:${sort.asc ? 'ASC' : 'DESC'}${!featured ? '&featured=false' : ''}${
