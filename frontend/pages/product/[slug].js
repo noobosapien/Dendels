@@ -44,6 +44,7 @@ import { setDebug } from '../../helpers/setDebug';
 import Message from '../../components/common/Message';
 import VariantGrid from '../../components/Product/VariantGrid';
 import Returns from '../../components/Product/Returns';
+import HdrStrongIcon from '@mui/icons-material/HdrStrong';
 
 export default function ProductPage(props) {
   const { product } = props;
@@ -86,6 +87,8 @@ export default function ProductPage(props) {
     if (variant.images instanceof Array && variant.images.length > 0) {
       setImage(variant.images[0].url);
     }
+
+    console.log(variant);
   }, [variant]);
 
   const handleNumberChange = (e) => {
@@ -183,7 +186,7 @@ export default function ProductPage(props) {
         </Grid>
 
         {/* details */}
-        <Grid item>
+        <Grid item lg={4}>
           <Grid container direction="column" spacing={6}>
             {/* varient */}
             <Grid item>
@@ -254,6 +257,34 @@ export default function ProductPage(props) {
             {/* desc */}
             <Grid item sx={{ marginTop: '2rem' }}>
               <Typography variant="h6">{prodInfo.description}</Typography>
+            </Grid>
+
+            <Grid item sx={{ marginTop: '1rem', marginBottom: '1rem' }}>
+              <Grid container direction={'column'} spacing={3}>
+                {variant.data instanceof Array ? (
+                  variant.data.map((vari) => (
+                    <Grid item container justifyContent="space-between">
+                      <Grid item>
+                        <Typography
+                          textAlign="center"
+                          sx={{ fontSize: '1.1rem' }}
+                        >
+                          {/* <HdrStrongIcon /> */}
+                          {vari.name}
+                        </Typography>
+                      </Grid>
+
+                      <Grid item>
+                        <Typography sx={{ fontSize: '1.1rem' }}>
+                          {vari.value}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  ))
+                ) : (
+                  <></>
+                )}
+              </Grid>
             </Grid>
 
             {/* add to cart */}

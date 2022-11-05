@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import React from 'react';
-import Accesories from '../../public/accesories.jpg';
+import Trimmers from '../../public/trimmers.jpg';
 import HairRemoval from '../../public/hairremoval.jpg';
 import Straightners from '../../public/straightners.jpg';
 import CategoryCard from './CategoryCard';
@@ -17,15 +17,15 @@ export default function Categories() {
           {/* category links */}
           <Grid item>
             <CategoryCard
-              imgSrc={Accesories.src}
-              text={'Accesories'}
-              slug={'accesories'}
+              imgSrc={Trimmers.src}
+              text={'Hair Trimmers'}
+              slug={'trimmers'}
             />
           </Grid>
           <Grid item>
             <CategoryCard
               imgSrc={Straightners.src}
-              text={'Hair Straightners'}
+              text={'Hair Straightners / Hair Driers'}
               slug={'straightners'}
             />
           </Grid>
