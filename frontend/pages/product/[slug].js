@@ -15,7 +15,13 @@ import {
   IconButton,
   List,
   ListItem,
+  Paper,
   Rating,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
   TextField,
   Toolbar,
   Tooltip,
@@ -260,31 +266,22 @@ export default function ProductPage(props) {
             </Grid>
 
             <Grid item sx={{ marginTop: '1rem', marginBottom: '1rem' }}>
-              <Grid container direction={'column'} spacing={3}>
-                {variant.data instanceof Array ? (
-                  variant.data.map((vari) => (
-                    <Grid item container justifyContent="space-between">
-                      <Grid item>
-                        <Typography
-                          textAlign="center"
-                          sx={{ fontSize: '1.1rem' }}
-                        >
-                          {/* <HdrStrongIcon /> */}
-                          {vari.name}
-                        </Typography>
-                      </Grid>
-
-                      <Grid item>
-                        <Typography sx={{ fontSize: '1.1rem' }}>
-                          {vari.value}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  ))
-                ) : (
-                  <></>
-                )}
-              </Grid>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableBody>
+                    {variant.data instanceof Array ? (
+                      variant.data.map((vari) => (
+                        <TableRow component={'th'} scope="row">
+                          <TableCell>{vari.name}</TableCell>
+                          <TableCell align="right">{vari.value}</TableCell>
+                        </TableRow>
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </Grid>
 
             {/* add to cart */}
