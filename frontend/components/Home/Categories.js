@@ -25,14 +25,14 @@ export default function Categories() {
           <Grid item>
             <CategoryCard
               imgSrc={Straightners.src}
-              text={'Hair Straightners / Hair Driers'}
+              text={'Hair Straightners / Hair Dryers'}
               slug={'straightners'}
             />
           </Grid>
           <Grid item>
             <CategoryCard
               imgSrc={HairRemoval.src}
-              text={'Hair Removal'}
+              text={'Permanent Hair Removal'}
               slug="removal"
             />
           </Grid>
