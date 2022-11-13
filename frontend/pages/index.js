@@ -34,6 +34,8 @@ export default function Home({ featured }) {
     <Layout title="Dendels" description={'Dendels hand crafted and delivered'}>
       {/* Hero */}
       <Hero />
+      {/* Bundles */}
+      <Bundles />
       {/* Categories */}
       <Categories />
       {/* Special promo */}
@@ -42,8 +44,6 @@ export default function Home({ featured }) {
       <Featured />
       {/* First to buy latest */}
       <Latest />
-      {/* Bundles */}
-      <Bundles />
       {/* Gift sets */}
       <GiftSets />
       {/* Subscribe */}

@@ -92,7 +92,6 @@ export default function Layout({ title, description, children }) {
             }}
           >
             <Grid item>
-              {/* <NextLink href="/"> */}
               <>
                 <LogoButton
                   variant="h3"
@@ -106,7 +105,6 @@ export default function Layout({ title, description, children }) {
                   Dendels
                 </LogoButton>
               </>
-              {/* </NextLink> */}
             </Grid>
 
             <Grid item>
@@ -122,7 +120,7 @@ export default function Layout({ title, description, children }) {
                           fontSize: '2.5rem',
                         },
                         [theme.breakpoints.down('sm')]: {
-                          fontSize: '2.0rem',
+                          fontSize: '1.5rem',
                         },
                       })}
                     />
@@ -151,25 +149,27 @@ export default function Layout({ title, description, children }) {
                               fontSize: '2.5rem',
                             },
                             [theme.breakpoints.down('sm')]: {
-                              fontSize: '2.0rem',
+                              fontSize: '1.5rem',
                             },
                           })}
                         />
                       </Badge>
                     ) : (
-                      <ShoppingBagIcon
-                        sx={(theme) => ({
-                          [theme.breakpoints.up('lg')]: {
-                            fontSize: '3.0rem',
-                          },
-                          [theme.breakpoints.down('lg')]: {
-                            fontSize: '2.5rem',
-                          },
-                          [theme.breakpoints.down('sm')]: {
-                            fontSize: '1.5rem',
-                          },
-                        })}
-                      />
+                      <>
+                        <ShoppingBagIcon
+                          sx={(theme) => ({
+                            [theme.breakpoints.up('lg')]: {
+                              fontSize: '3.0rem',
+                            },
+                            [theme.breakpoints.down('lg')]: {
+                              fontSize: '2.5rem',
+                            },
+                            [theme.breakpoints.down('sm')]: {
+                              fontSize: '1.5rem',
+                            },
+                          })}
+                        />
+                      </>
                     )}
                   </NavButton>
                 </Tooltip>
@@ -191,7 +191,7 @@ export default function Layout({ title, description, children }) {
           paddingBottom: '4rem',
         }}
       >
-        <Divider sx={{ marginBottom: '1rem' }} />
+        {/* <Divider sx={{ marginBottom: '1rem' }} /> */}
 
         <Grid container alignItems="center">
           <Grid item container alignItems="center" direction="column" md={4}>
