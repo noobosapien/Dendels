@@ -24,6 +24,7 @@ import Message from '../../components/common/Message';
 export default function Bundle({ bundle, variants }) {
   const theme = useTheme();
   const matchesMD = useMediaQuery(theme.breakpoints.down('md'));
+  console.log('Bundle: ', bundle);
 
   const { state, dispatch } = useContext(Store);
   const [update, setUpdate] = useState(0);
@@ -79,7 +80,7 @@ export default function Bundle({ bundle, variants }) {
           <Grid container item md={5} direction="column" spacing={4}>
             <Grid item>
               <Image
-                src={bundle.image.url}
+                src={bundle && bundle.image ? bundle.image.url : CardBG.src}
                 width={matchesMD ? 320 : 600}
                 height={matchesMD ? 320 : 600}
               />
@@ -93,10 +94,16 @@ export default function Bundle({ bundle, variants }) {
 
             <Grid item container direction="column" spacing={6}>
               {variants.map((object) => (
-                <Grid item container spacing={4} justifyContent="center">
+                <Grid
+                  key={`pro${object[0].product}`}
+                  item
+                  container
+                  spacing={4}
+                  justifyContent="center"
+                >
                   {/* {console.log('OBJ: ', object[0].variants)} */}
                   {object[0].variants.map((variant) => (
-                    <>
+                    <React.Fragment key={variant.id}>
                       <Grid item>
                         <Card
                           sx={{
@@ -119,7 +126,7 @@ export default function Bundle({ bundle, variants }) {
                       <Grid item>
                         <Divider />
                       </Grid>
-                    </>
+                    </React.Fragment>
                   ))}
                 </Grid>
               ))}
@@ -141,7 +148,7 @@ export default function Bundle({ bundle, variants }) {
               <Grid container item spacing={10} justifyContent="space-evenly">
                 {bundle.dendels_products instanceof Array &&
                   bundle.dendels_products.map((prod) => (
-                    <Grid item>
+                    <Grid item key={`__${prod.id}`}>
                       <SmallProductCard small product={prod} />
                     </Grid>
                   ))}
