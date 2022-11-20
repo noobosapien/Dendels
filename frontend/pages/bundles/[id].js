@@ -159,7 +159,7 @@ export default function Bundle({ bundle, variants }) {
                     fontSize: '1rem',
                   }}
                 >
-                  {bundle.description}
+                  {bundle?.description}
                 </Typography>
               </Grid>
 
@@ -170,7 +170,7 @@ export default function Bundle({ bundle, variants }) {
                     fontSize: '1.2rem',
                   }}
                 >
-                  Bundle worth: ${bundle.highPrice.toFixed(2)}
+                  Bundle worth: ${bundle?.highPrice.toFixed(2)}
                 </Typography>
               </Grid>
 
@@ -181,7 +181,7 @@ export default function Bundle({ bundle, variants }) {
                     fontSize: '1.4rem',
                   }}
                 >
-                  Bundle price: ${bundle.lowPrice.toFixed(2)}
+                  Bundle price: ${bundle?.lowPrice.toFixed(2)}
                 </Typography>
               </Grid>
 
@@ -225,13 +225,13 @@ export default function Bundle({ bundle, variants }) {
 
                   <Grid item>
                     <Typography>
-                      <s>${bundle.highPrice.toFixed(2)}</s>
+                      <s>${bundle?.highPrice.toFixed(2)}</s>
                     </Typography>
                   </Grid>
 
                   <Grid item>
                     <Typography sx={{ fontSize: '1rem', fontWeight: '600' }}>
-                      ${bundle.lowPrice.toFixed(2)}
+                      ${bundle?.lowPrice.toFixed(2)}
                     </Typography>
                   </Grid>
                 </Grid>
