@@ -31,7 +31,7 @@ function Order({ params, query }) {
 
         setName(`${sInfo.firstName} ${sInfo.lastName}`);
       } else {
-        // router.push('/bag');
+        router.push('/bag');
         console.log('Order not found');
       }
     };
