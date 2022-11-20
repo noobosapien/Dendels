@@ -93,8 +93,6 @@ export default function ProductPage(props) {
     if (variant.images instanceof Array && variant.images.length > 0) {
       setImage(variant.images[0].url);
     }
-
-    console.log(variant);
   }, [variant]);
 
   const handleNumberChange = (e) => {
@@ -426,6 +424,13 @@ export default function ProductPage(props) {
           <Reviews product={product[0]} />
         </Grid> */}
       </Grid>
+
+      <Message
+        text="Item added to bag!"
+        severity="success"
+        open={openMessage}
+        setOpen={setOpenMessage}
+      />
 
       <Box sx={{ display: { xs: 'block', md: 'none' } }}>
         <AppBar

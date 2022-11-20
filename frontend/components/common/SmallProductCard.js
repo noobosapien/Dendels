@@ -11,7 +11,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 
-export default function SmallProductCard({ product }) {
+export default function SmallProductCard({ product, small }) {
   const router = useRouter();
   // console.log('Product: ', product);
   const goToProduct = () => {
@@ -22,7 +22,7 @@ export default function SmallProductCard({ product }) {
     <>
       <Card
         sx={{
-          width: 240,
+          width: small ? 150 : 240,
           background:
             'linear-gradient(125deg, rgba(255,217,112,1) 0%, rgba(255,217,112,1) 100%)',
         }}
@@ -30,7 +30,7 @@ export default function SmallProductCard({ product }) {
         <CardActionArea onClick={goToProduct}>
           <CardMedia
             component="img"
-            height="140"
+            height={small ? '60' : '140'}
             image={product.image.url}
             alt={product.name}
           />
@@ -38,7 +38,7 @@ export default function SmallProductCard({ product }) {
             sx={{
               background:
                 'linear-gradient(125deg, rgba(234,11,160,1) 0%, rgba(234,11,160,0.87) 100%)',
-              borderTopLeftRadius: '100px 130px',
+              borderTopLeftRadius: small ? '40px 60px' : '100px 130px',
             }}
           >
             <Grid
@@ -50,7 +50,7 @@ export default function SmallProductCard({ product }) {
               <Grid item>
                 <Typography
                   textAlign="center"
-                  variant="h5"
+                  variant={small ? 'body' : 'h5'}
                   sx={{ color: 'white' }}
                 >
                   {product.name}

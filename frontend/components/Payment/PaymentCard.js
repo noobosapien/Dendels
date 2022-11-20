@@ -260,6 +260,7 @@ export default function PaymentCard({ loading, setLoading }) {
   const {
     cart: {
       cartItems,
+      bundles,
       shippingAddress,
       shippingCountry,
       billingAddress,
@@ -281,11 +282,14 @@ export default function PaymentCard({ loading, setLoading }) {
           cartItems.reduce(
             (a, c) => a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
             0
-          ) + (shippingMethod.value === 'standard' ? 5 : 20)
+          ) +
+          bundles.reduce((a, c) => a + c.lowPrice, 0) +
+          (shippingMethod.value === 'standard' ? 5 : 20)
         ).toFixed(2);
 
         const result = await processOrder({
           items: cartItems,
+          bundles,
           total,
           shippingOption: {
             label: state.cart.shippingMethod && state.cart.shippingMethod.value,
@@ -298,8 +302,6 @@ export default function PaymentCard({ loading, setLoading }) {
           idempotencyKey,
           shippingAddress,
         });
-
-        console.log(result);
 
         if (result.client_secret) {
           setClientSecret(result.client_secret);
@@ -459,15 +461,17 @@ export default function PaymentCard({ loading, setLoading }) {
           cartItems.reduce(
             (a, c) => a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
             0
-          ) + (shippingMethod.value === 'standard' ? 5 : 20)
+          ) +
+          bundles.reduce((a, c) => a + c.lowPrice, 0) +
+          (shippingMethod.value === 'standard' ? 5 : 20)
         ).toFixed(2);
 
-        const subtotal = cartItems
-          .reduce(
+        const subtotal = (
+          cartItems.reduce(
             (a, c) => a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
             0
-          )
-          .toFixed(2);
+          ) + bundles.reduce((a, c) => a + c.lowPrice, 0)
+        ).toFixed(2);
 
         const country = countries.filter(
           (c) => c.code === shippingCountry.value
@@ -475,6 +479,7 @@ export default function PaymentCard({ loading, setLoading }) {
 
         const order = await placeOrder({
           items: cartItems,
+          bundles,
           total,
           subtotal,
           country,
@@ -676,7 +681,9 @@ export default function PaymentCard({ loading, setLoading }) {
                     (a, c) =>
                       a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
                     0
-                  ) + (shippingMethod.value === 'standard' ? 5 : 20)
+                  ) +
+                  bundles.reduce((a, c) => a + c.lowPrice, 0) +
+                  (shippingMethod.value === 'standard' ? 5 : 20)
                 ).toFixed(2)}`
               )}
             </Button>

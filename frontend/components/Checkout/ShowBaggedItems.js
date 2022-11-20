@@ -27,15 +27,17 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
   const [collapse, setCollapse] = useState(false);
 
   const [orderItems, setOrderItems] = useState([]);
+  const [orderBundles, setOrderBundles] = useState([]);
   const [orderShipping, setOrderShipping] = useState('');
   const [orderSTotal, setOrderSTotal] = useState(0);
   const [orderTotal, setOrderTotal] = useState(0);
 
   const {
-    cart: { cartItems },
+    cart: { cartItems, bundles },
   } = state;
 
   useEffect(() => {
+    //implement bundles later
     if (order) {
       const getOrderFromServer = async (order) => {
         try {
@@ -72,6 +74,15 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
           }
 
           setOrderItems([...oItems]);
+
+          const bundles =
+            typeof result.bundles === 'string'
+              ? JSON.parse(result.bundles)
+              : result.bundles
+              ? result.bundles
+              : [];
+
+          setOrderBundles([...bundles]);
         } catch (e) {
           console.log(e);
         }
@@ -84,6 +95,8 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
   const handleColapseClicked = (e) => {
     setCollapse(!collapse);
   };
+
+  console.log('Bundles: ', orderBundles);
 
   return (
     <Grid container direction="column" justifyContent="center" spacing={4}>
@@ -114,8 +127,9 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
                 zIndex: 0,
               }}
             >
-              {order
-                ? orderItems.map((item) => (
+              {order ? (
+                <>
+                  {orderItems.map((item) => (
                     <React.Fragment key={item.id}>
                       <ListItem
                         secondaryAction={
@@ -150,8 +164,41 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
                       </ListItem>
                       <Divider variant="inset" component="li" />
                     </React.Fragment>
-                  ))
-                : cartItems.map((item) => (
+                  ))}
+
+                  {orderBundles.map((item) => (
+                    <React.Fragment key={item.id}>
+                      <ListItem
+                        secondaryAction={
+                          <Typography sx={{ fontSize: '1.5rem' }}>
+                            ${(item.lowPrice * 1).toFixed(2)}
+                          </Typography>
+                        }
+                      >
+                        <ListItemAvatar>
+                          <Badge
+                            badgeContent={'Bundle'}
+                            color="secondary"
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                          >
+                            <Avatar src={item.img} alt={item.name}></Avatar>
+                          </Badge>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={item.name}
+                          secondary={`Each: $${item.lowPrice.toFixed(2)}`}
+                        />
+                      </ListItem>
+                      <Divider variant="inset" component="li" />
+                    </React.Fragment>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {cartItems.map((item) => (
                     <React.Fragment key={`${item.id}_`}>
                       <ListItem
                         secondaryAction={
@@ -187,6 +234,41 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
                       <Divider variant="inset" component="li" />
                     </React.Fragment>
                   ))}
+
+                  {bundles.map((item) => (
+                    <React.Fragment key={`${item.id}_`}>
+                      <ListItem
+                        secondaryAction={
+                          <Typography sx={{ fontSize: '1.5rem' }}>
+                            ${item.lowPrice.toFixed(2)}
+                          </Typography>
+                        }
+                      >
+                        <ListItemAvatar>
+                          <Badge
+                            badgeContent={'Bundle'}
+                            color="secondary"
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                          >
+                            <Avatar
+                              src={item.image.url}
+                              alt={item.name}
+                            ></Avatar>
+                          </Badge>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={item.name}
+                          secondary={`Each: $${item.lowPrice.toFixed(2)}`}
+                        />
+                      </ListItem>
+                      <Divider variant="inset" component="li" />
+                    </React.Fragment>
+                  ))}
+                </>
+              )}
             </List>
           </Card>
         </Collapse>
@@ -209,13 +291,13 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
             Subtotal: $
             {order && orderSTotal
               ? orderSTotal.toFixed(2)
-              : cartItems
-                  .reduce(
+              : (
+                  cartItems.reduce(
                     (a, c) =>
                       a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
                     0
-                  )
-                  .toFixed(2)}
+                  ) + bundles.reduce((a, c) => a + c.lowPrice, 0)
+                ).toFixed(2)}
           </Typography>
         </Paper>
       </Grid>
@@ -265,7 +347,9 @@ export default function ShowBaggedItems({ shipping, order, auth }) {
                         (a, c) =>
                           a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
                         0
-                      ) + (shipping === 'standard' ? 5 : 20)
+                      ) +
+                      bundles.reduce((a, c) => a + c.lowPrice, 0) +
+                      (shipping === 'standard' ? 5 : 20)
                     ).toFixed(2)}
               </Typography>
             </Paper>

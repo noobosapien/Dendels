@@ -32,7 +32,6 @@ export default function Category(props) {
 
   useEffect(() => {
     setAllProducts(products);
-    console.log(products);
   }, [products]);
 
   // console.log('Outside: ', category);

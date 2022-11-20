@@ -36,7 +36,7 @@ export default function Checkout() {
   const [openMessage, setOpenMessage] = useState(false);
 
   const {
-    cart: { cartItems, shippingAddress, shippingCountry },
+    cart: { cartItems, bundles, shippingAddress, shippingCountry },
   } = state;
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function Checkout() {
   }, [state.cart.shippingMethod]);
 
   useEffect(() => {
-    if (cartItems.length < 1) {
+    if (cartItems.length < 1 && bundles.length < 1) {
       router.push('/bag');
     }
 

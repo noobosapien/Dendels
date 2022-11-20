@@ -129,10 +129,12 @@ export default function Layout({ title, description, children }) {
 
                 <Tooltip title="Bag">
                   <NavButton onClick={(e) => router.push('/bag')}>
-                    {cart.cartItems.length ? (
+                    {cart.cartItems.length || cart.bundles.length ? (
                       <Badge
                         color="primary"
-                        badgeContent={cart.cartItems.length}
+                        badgeContent={
+                          cart.cartItems.length + cart.bundles.length
+                        }
                         showZero
                         anchorOrigin={{
                           vertical: 'bottom',

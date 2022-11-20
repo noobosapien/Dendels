@@ -21,7 +21,5 @@ export async function setReview(
         text,
       }
     );
-
-    console.log(await res.json());
   } catch (e) {}
 }

@@ -23,7 +23,13 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
 
   const {
-    cart: { cartItems, shippingAddress, shippingCountry, shippingMethod },
+    cart: {
+      cartItems,
+      bundles,
+      shippingAddress,
+      shippingCountry,
+      shippingMethod,
+    },
   } = state;
 
   useEffect(() => {
@@ -32,7 +38,7 @@ export default function Checkout() {
 
   useEffect(() => {
     if (!loading) {
-      if (cartItems.length < 1) {
+      if (cartItems.length < 1 && bundles.length < 1) {
         router.push('/bag');
       }
 

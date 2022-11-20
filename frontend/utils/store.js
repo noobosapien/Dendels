@@ -11,6 +11,7 @@ const initialState = {
     cartItems: Cookies.get('cartItems')
       ? JSON.parse(Cookies.get('cartItems'))
       : [],
+    bundles: Cookies.get('bundles') ? JSON.parse(Cookies.get('bundles')) : [],
     shippingAddress: Cookies.get('shippingAddress')
       ? JSON.parse(Cookies.get('shippingAddress'))
       : {
@@ -61,6 +62,32 @@ function reducer(state, action) {
       return { ...state, topMenu: { open: false } };
     }
 
+    case 'BUNDLES_ADD_ITEM': {
+      const newItem = action.payload;
+      const existItem = state.cart.bundles.find(
+        (item) => item.id === newItem.id
+      );
+
+      const bundles = existItem
+        ? state.cart.bundles.map((item) =>
+            item.name === existItem.name ? newItem : item
+          )
+        : [...state.cart.bundles, newItem];
+
+      Cookies.set('bundles', JSON.stringify(bundles));
+
+      return { ...state, cart: { ...state.cart, bundles } };
+    }
+
+    case 'BUNDLES_REMOVE_ITEM': {
+      const bundles = state.cart.bundles.filter(
+        (item) => item.id !== action.payload.id
+      );
+      Cookies.set('bundles', JSON.stringify(bundles));
+
+      return { ...state, cart: { ...state.cart, bundles: [...bundles] } };
+    }
+
     case 'CART_ADD_ITEM': {
       const newItem = action.payload;
       const existItem = state.cart.cartItems.find(
@@ -74,12 +101,6 @@ function reducer(state, action) {
         : [...state.cart.cartItems, newItem];
 
       Cookies.set('cartItems', JSON.stringify(cartItems));
-      console.log(
-        'Cookies: ',
-        Cookies.get('cartItems') ? JSON.parse(Cookies.get('cartItems')) : []
-      );
-
-      console.log(cartItems);
 
       return { ...state, cart: { ...state.cart, cartItems } };
     }
@@ -95,7 +116,7 @@ function reducer(state, action) {
         }
       });
       Cookies.set('cartItems', JSON.stringify(cartItems));
-      return { ...state, cart: { cartItems: [...cartItems] } };
+      return { ...state, cart: { ...state.cart, cartItems: [...cartItems] } };
     }
 
     case 'CART_REMOVE_ITEM': {
@@ -104,12 +125,7 @@ function reducer(state, action) {
       );
       Cookies.set('cartItems', JSON.stringify(cartItems));
 
-      console.log(
-        'Cookies: ',
-        Cookies.get('cartItems') ? JSON.parse(Cookies.get('cartItems')) : []
-      );
-
-      return { ...state, cart: { cartItems: [...cartItems] } };
+      return { ...state, cart: { ...state.cart, cartItems: [...cartItems] } };
     }
 
     case 'SAVE_SHIPPING_ADDRESS': {
@@ -174,11 +190,17 @@ function reducer(state, action) {
 
     case 'CART_CLEAR': {
       Cookies.set('cartItems', JSON.stringify([]));
+      Cookies.set('bundles', JSON.stringify([]));
       Cookies.set('shippingMethod', JSON.stringify({ value: '' }));
 
       return {
         ...state,
-        cart: { ...state.cart, cartItems: [], shippingMethod: { value: '' } },
+        cart: {
+          ...state.cart,
+          cartItems: [],
+          bundles: [],
+          shippingMethod: { value: '' },
+        },
       };
     }
 

@@ -16,14 +16,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Store } from '../../utils/store';
 import DirectionsBoatFilledOutlinedIcon from '@mui/icons-material/DirectionsBoatFilledOutlined';
 import { getProductInfo } from '../../helpers/getProductInfo';
+import { getBundleInfo } from '../../helpers/getBundle';
 
 export default function SideCart({ shipping, order }) {
   const { state, dispatch } = useContext(Store);
   const [items, setItems] = useState([]);
+  const [allBundles, setAllBundles] = useState([]);
   const [shippingOption, setShippingOption] = useState({});
 
   const {
-    cart: { cartItems },
+    cart: { cartItems, bundles },
   } = state;
 
   useEffect(() => {
@@ -55,7 +57,6 @@ export default function SideCart({ shipping, order }) {
             for (var i = 0; i < parsed.length; i++) {
               const product = await getProductInfo(parsed[i].id);
 
-              console.log(product);
               product[0].quantity = parsed[i].quantity;
               product[0].img = product[0].images[0].url;
 
@@ -69,6 +70,38 @@ export default function SideCart({ shipping, order }) {
       }
     };
 
+    //implement later
+    const getBundlesFromServer = async () => {
+      if (order && order.bundles) {
+        var _allBundles = [];
+        const parsed =
+          typeof order.bundles === 'string'
+            ? JSON.parse(order.bundles)
+            : order.bundles
+            ? order.bundles
+            : [];
+        const parsedShipping =
+          typeof order.shippingOption === 'string'
+            ? JSON.parse(order.shippingOption)
+            : order.shippingOption
+            ? order.shippingOption
+            : {};
+
+        if (parsed instanceof Array) {
+          for (var i = 0; i < parsed.length; i++) {
+            const bundle = await getBundleInfo(parsed[i].id);
+
+            bundle[0].img = bundle[0].image;
+            _allBundles.push(bundle[0]);
+          }
+        }
+
+        setAllBundles([..._allBundles]);
+        setShippingOption(parsedShipping);
+      }
+    };
+
+    getBundlesFromServer();
     getItemsFromServer();
   }, [order]);
 
@@ -84,8 +117,9 @@ export default function SideCart({ shipping, order }) {
                 zIndex: 0,
               }}
             >
-              {order
-                ? items.map((item) => (
+              {order ? (
+                <>
+                  {items.map((item) => (
                     <React.Fragment key={item.id}>
                       <ListItem
                         secondaryAction={
@@ -125,8 +159,45 @@ export default function SideCart({ shipping, order }) {
                       </ListItem>
                       <Divider variant="inset" component="li" />
                     </React.Fragment>
-                  ))
-                : cartItems.map((item) => (
+                  ))}
+
+                  {allBundles.map((item) => (
+                    <React.Fragment key={item.id}>
+                      <ListItem
+                        secondaryAction={
+                          <Typography sx={{ fontSize: '1.5rem' }}>
+                            ${item.lowPrice.toFixed(2)}
+                          </Typography>
+                        }
+                      >
+                        <ListItemAvatar>
+                          <Badge
+                            badgeContent={'Bundle'}
+                            color="secondary"
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                          >
+                            <Avatar
+                              src={item.img.url}
+                              alt={item.name}
+                              sx={{ width: 100, height: 100 }}
+                            ></Avatar>
+                          </Badge>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={item.name}
+                          secondary={`Each: $${item.lowPrice.toFixed(2)}`}
+                        />
+                      </ListItem>
+                      <Divider variant="inset" component="li" />
+                    </React.Fragment>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {cartItems.map((item) => (
                     <React.Fragment key={`${item.id}_`}>
                       <ListItem
                         key={item.id}
@@ -168,6 +239,43 @@ export default function SideCart({ shipping, order }) {
                       <Divider variant="inset" component="li" />
                     </React.Fragment>
                   ))}
+
+                  {bundles.map((bundle) => (
+                    <React.Fragment key={bundle.id}>
+                      <ListItem
+                        key={bundle.id}
+                        secondaryAction={
+                          <Typography sx={{ fontSize: '1.5rem' }}>
+                            ${bundle.lowPrice.toFixed(2)}
+                          </Typography>
+                        }
+                      >
+                        <ListItemAvatar>
+                          <Badge
+                            badgeContent={'Bundle'}
+                            color="secondary"
+                            anchorOrigin={{
+                              vertical: 'top',
+                              horizontal: 'right',
+                            }}
+                          >
+                            <Avatar
+                              src={bundle.image.url}
+                              alt={bundle.name}
+                              sx={{ width: 100, height: 100 }}
+                            ></Avatar>
+                          </Badge>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={bundle.name}
+                          secondary={`Each: $${bundle.lowPrice.toFixed(2)}`}
+                        />
+                      </ListItem>
+                      <Divider variant="inset" component="li" />
+                    </React.Fragment>
+                  ))}
+                </>
+              )}
             </List>
           </Grid>
 
@@ -191,18 +299,18 @@ export default function SideCart({ shipping, order }) {
                     })}
                   >
                     Subtotal: $
-                    {items
-                      .reduce(
+                    {(
+                      items.reduce(
                         (a, c) =>
                           a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
                         0
-                      )
-                      .toFixed(2)}
+                      ) + allBundles.reduce((a, c) => a + c.lowPrice, 0)
+                    ).toFixed(2)}
                   </Typography>
                 </Paper>
               </Grid>
             </>
-          ) : cartItems.length ? (
+          ) : cartItems.length || bundles.length ? (
             <>
               <Grid item alignSelf="center">
                 <Paper
@@ -222,13 +330,13 @@ export default function SideCart({ shipping, order }) {
                     })}
                   >
                     Subtotal: $
-                    {cartItems
-                      .reduce(
+                    {(
+                      cartItems.reduce(
                         (a, c) =>
                           a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
                         0
-                      )
-                      .toFixed(2)}
+                      ) + bundles.reduce((a, c) => a + c.lowPrice, 0)
+                    ).toFixed(2)}
                   </Typography>
                 </Paper>
               </Grid>
@@ -273,13 +381,15 @@ export default function SideCart({ shipping, order }) {
                         (a, c) =>
                           a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
                         0
-                      ) + (shippingOption.label === 'standard' ? 5 : 20)
+                      ) +
+                      allBundles.reduce((a, c) => a + c.lowPrice, 0) +
+                      (shippingOption.label === 'standard' ? 5 : 20)
                     ).toFixed(2)}
                   </Typography>
                 </Paper>
               </Grid>
             </>
-          ) : shipping && cartItems.length ? (
+          ) : shipping && (cartItems.length || bundles.length) ? (
             <>
               <Grid item alignSelf="center">
                 <Grid container spacing={2}>
@@ -314,7 +424,9 @@ export default function SideCart({ shipping, order }) {
                         (a, c) =>
                           a + c.quantity * (c.sale ? c.lowPrice : c.highPrice),
                         0
-                      ) + (shipping === 'standard' ? 5 : 20)
+                      ) +
+                      bundles.reduce((a, c) => a + c.lowPrice, 0) +
+                      (shipping === 'standard' ? 5 : 20)
                     ).toFixed(2)}
                   </Typography>
                 </Paper>

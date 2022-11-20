@@ -1,8 +1,11 @@
 import { Button, Grid, Typography } from '@mui/material';
 import React from 'react';
 import BundleCard from '../common/BundleCard';
+import { useRouter } from 'next/router';
 
 export default function Bundles() {
+  const router = useRouter();
+
   return (
     <div style={{ marginBottom: '10rem' }}>
       <Grid container direction="column" alignItems="center" spacing={10}>
@@ -23,7 +26,9 @@ export default function Bundles() {
         </Grid>
 
         <Grid item>
-          <Button variant="outlined">View All</Button>
+          <Button variant="outlined" onClick={(e) => router.push('/bundles')}>
+            View All
+          </Button>
         </Grid>
       </Grid>
     </div>

@@ -93,7 +93,7 @@ export default function BundleCard() {
               </Grid>
               <Grid item>
                 <Button variant="contained" color="secondary">
-                  Add to cart
+                  Add to bag
                 </Button>
               </Grid>
             </Grid>

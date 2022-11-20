@@ -6,16 +6,21 @@ import { Store } from '../utils/store';
 import dynamic from 'next/dynamic';
 import BaggedItem from '../components/Bag/BaggedItem';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import BaggedBundle from '../components/Bag/BaggedBundle';
 
 function Cart() {
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
   const {
-    cart: { cartItems },
+    cart: { cartItems, bundles },
   } = state;
 
   const removeItemHandler = (item) => (e) => {
     dispatch({ type: 'CART_REMOVE_ITEM', payload: item });
+  };
+
+  const removeBundleHandler = (item) => (e) => {
+    dispatch({ type: 'BUNDLES_REMOVE_ITEM', payload: item });
   };
 
   const handleQtyChanged = (item) => (e) => {
@@ -55,7 +60,9 @@ function Cart() {
           </Typography>
         </Grid>
 
-        {cartItems instanceof Array && cartItems.length === 0 ? (
+        {cartItems instanceof Array &&
+        bundles instanceof Array &&
+        cartItems.length + bundles.length === 0 ? (
           <>
             <Grid item>
               <Typography>Your bag is currently empty</Typography>
@@ -92,16 +99,34 @@ function Cart() {
               </Grid>
             </Grid>
 
+            <Grid item alignItems="space-evenly">
+              <Grid item container direction="column" spacing={5}>
+                {bundles.map((item) => (
+                  <Grid item key={item._id}>
+                    <BaggedBundle
+                      item={item}
+                      removeItemHandler={removeBundleHandler(item)}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+
             <Grid item>
               <Card>
                 <List>
                   <ListItem>
                     <Typography variant="h6">
-                      Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}){' '}
-                      item(s) : $
-                      {cartItems
-                        .reduce((a, c) => a + c.quantity * c.lowPrice, 0)
-                        .toFixed(2)}
+                      Subtotal (
+                      {cartItems.reduce((a, c) => a + c.quantity, 0) +
+                        bundles.reduce((a, c) => a + 1, 0)}
+                      ) item(s) : $
+                      {(
+                        cartItems.reduce(
+                          (a, c) => a + c.quantity * c.lowPrice,
+                          0
+                        ) + bundles.reduce((a, c) => a + c.lowPrice, 0)
+                      ).toFixed(2)}
                     </Typography>
                   </ListItem>
 

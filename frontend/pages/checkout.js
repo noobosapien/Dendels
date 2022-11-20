@@ -293,14 +293,14 @@ export default function Checkout() {
   }, [countryCode]);
 
   const {
-    cart: { cartItems },
+    cart: { cartItems, bundles },
   } = state;
 
   useEffect(() => {
-    if (cartItems.length < 1) {
+    if (cartItems.length < 1 && bundles.length < 1) {
       router.push('/bag');
     }
-  }, [cartItems]);
+  }, [cartItems, bundles]);
 
   const handleContinue = (e) => {
     e.preventDefault();
