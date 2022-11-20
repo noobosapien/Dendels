@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 
 export default function Hero() {
   const theme = useTheme();
-  const matchesMD = useMediaQuery(theme.breakpoints.down('md'));
+  const matchesSM = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <div
@@ -20,12 +20,13 @@ export default function Hero() {
         justifyContent: 'center',
         marginBottom: '4rem',
         marginTop: '4rem',
+        maxWidth: '100vw',
       }}
     >
       <img
-        src={matchesMD ? HeroM.src : HeroD.src}
+        src={matchesSM ? HeroM.src : HeroD.src}
         style={{
-          width: matchesMD ? '56vh' : '70vw',
+          width: matchesSM ? '100vw' : '70vw',
         }}
       />
     </div>

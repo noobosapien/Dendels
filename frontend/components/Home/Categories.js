@@ -7,21 +7,30 @@ import CategoryCard from './CategoryCard';
 
 export default function Categories() {
   return (
-    <div>
+    <div style={{ marginBottom: '4rem' }}>
       <Grid container direction="column" alignItems="center" spacing={4}>
-        <Grid item>
-          <Typography variant="h5">Shop by Category</Typography>
+        <Grid item container direction="column" alignItems="center">
+          <Grid item>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: '300', fontSize: '1.4rem' }}
+            >
+              Don't need the whole bundle?
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography
+              variant="h5"
+              sx={{ marginLeft: '4rem', fontWeight: '500', fontSize: '1.4rem' }}
+            >
+              Shop individually.
+            </Typography>
+          </Grid>
         </Grid>
 
         <Grid item container justifyContent="space-evenly" spacing={4}>
           {/* category links */}
-          <Grid item>
-            <CategoryCard
-              imgSrc={Trimmers.src}
-              text={'Hair Trimmers'}
-              slug={'trimmers'}
-            />
-          </Grid>
+
           <Grid item>
             <CategoryCard
               imgSrc={Straightners.src}
@@ -34,6 +43,13 @@ export default function Categories() {
               imgSrc={HairRemoval.src}
               text={'Permanent Hair Removal'}
               slug="removal"
+            />
+          </Grid>
+          <Grid item>
+            <CategoryCard
+              imgSrc={Trimmers.src}
+              text={'Hair Trimmers'}
+              slug={'trimmers'}
             />
           </Grid>
         </Grid>

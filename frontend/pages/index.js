@@ -35,32 +35,28 @@ export default function Home({ featured }) {
       {/* Hero */}
       <Hero />
       {/* Bundles */}
-      <Bundles />
+      <Bundles bundles={featured} />
       {/* Categories */}
       <Categories />
       {/* Special promo */}
       <Promo />
-      {/* Featured */}
-      <Featured />
-      {/* First to buy latest */}
-      <Latest />
-      {/* Gift sets */}
-      <GiftSets />
       {/* Subscribe */}
       <Subscribe />
     </Layout>
   );
 }
 
-// export async function getStaticProps() {
-//   try {
-//     const res = await fetch(process.env.STRAPI_BASE + 'products?featured=true');
-//     const featured = await res.json();
+export async function getStaticProps() {
+  try {
+    const res = await fetch(
+      process.env.STRAPI_BASE + 'dendels-bundles?featured=true'
+    );
+    const featured = await res.json();
 
-//     return {
-//       props: {
-//         featured,
-//       },
-//     };
-//   } catch (e) {}
-// }
+    return {
+      props: {
+        featured,
+      },
+    };
+  } catch (e) {}
+}

@@ -9,11 +9,26 @@ export default function Promo() {
         direction="column"
         alignItems="center"
         sx={{
-          marginTop: '2rem',
+          marginTop: '4rem',
         }}
       >
-        <Grid item>
-          <Typography variant="h5">Special promo products</Typography>
+        <Grid item container direction="column" alignItems="center">
+          <Grid item>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: '300', fontSize: '1.4rem' }}
+            >
+              Products on special promo
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography
+              variant="h5"
+              sx={{ marginLeft: '4rem', fontWeight: '500', fontSize: '1.4rem' }}
+            >
+              Have a look at our featured products.
+            </Typography>
+          </Grid>
         </Grid>
 
         <Grid item container>

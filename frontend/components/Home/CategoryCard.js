@@ -10,7 +10,15 @@ export default function CategoryCard({ imgSrc, text, slug }) {
   const router = useRouter();
 
   return (
-    <Card sx={{ width: 240, height: 200 }}>
+    <Card
+      sx={{
+        width: 300,
+        height: 260,
+        borderImage: ' linear-gradient(#EA0BA022, #FFBE0B44) 30',
+        borderWidth: '0.5rem',
+        borderStyle: 'solid',
+      }}
+    >
       <CardActionArea onClick={() => router.push(`/category/${slug}`)}>
         <CardMedia component="img" height="140" image={imgSrc} alt="items" />
         <CardContent>
@@ -20,7 +28,7 @@ export default function CategoryCard({ imgSrc, text, slug }) {
             variant="h5"
             component="div"
             sx={{
-              fontSize: '1rem',
+              fontSize: '1.4rem',
             }}
           >
             {text}
