@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertTitle,
   Button,
   Card,
   CardActionArea,
@@ -7,7 +9,8 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
 import CardBG from '../../public/cardbg.png';
 
 export default function BundleCard({ bundle }) {
@@ -15,17 +18,27 @@ export default function BundleCard({ bundle }) {
     return Math.random() * (max - min) + min;
   }
 
-  const [borderOne] = useState(getRand(5, 20));
-  const [borderTwo] = useState(getRand(5, 20));
-  const [borderThree] = useState(getRand(5, 20));
-  const [borderFour] = useState(getRand(5, 20));
+  const router = useRouter();
+
+  const [percentage, setPercentage] = useState(0);
+
+  useEffect(() => {
+    if (bundle.highPrice) {
+      const val =
+        ((bundle.highPrice - bundle.lowPrice) * 100) / bundle.highPrice;
+      setPercentage(val.toFixed(0));
+    }
+  }, [bundle]);
 
   return (
     <>
       <Card
         sx={{
-          width: '300px',
-          borderRadius: `${borderOne}% ${borderTwo}% / ${borderThree}% ${borderFour}%`,
+          width: '320px',
+          // borderRadius: `${borderOne}% ${borderTwo}% / ${borderThree}% ${borderFour}%`,
+          borderImage: `url('${CardBG.src}') 30`,
+          borderWidth: '0.5rem',
+          borderStyle: 'solid',
         }}
         elevation={4}
       >
@@ -61,6 +74,18 @@ export default function BundleCard({ bundle }) {
                   </Typography>
                 </Grid>
               </Grid>
+
+              <Grid item>
+                <Alert severity="warning" icon={false} variant="standard">
+                  <AlertTitle>
+                    <strong style={{ fontSize: '1rem' }}>
+                      {percentage}% OFF
+                    </strong>
+                  </AlertTitle>
+                  Hurry while stock last!
+                </Alert>
+              </Grid>
+
               <Grid container item spacing={6}>
                 <Grid item>
                   <Typography variant="h5" sx={{ fontSize: '1.3rem' }}>
@@ -106,7 +131,11 @@ export default function BundleCard({ bundle }) {
             <Grid container item spacing={8}>
               {/* Add to cart */}
               <Grid item xs={12}>
-                <Button fullWidth variant="outlined">
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  onClick={(e) => router.push(`/bundles/${bundle.slug}`)}
+                >
                   View Bundle
                 </Button>
               </Grid>

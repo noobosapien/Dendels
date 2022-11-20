@@ -1,7 +1,8 @@
 import { Grid, Typography } from '@mui/material';
 import React from 'react';
+import ProductCard from '../common/ProductCard';
 
-export default function Promo() {
+export default function Promo({ products }) {
   return (
     <div>
       <Grid
@@ -10,7 +11,9 @@ export default function Promo() {
         alignItems="center"
         sx={{
           marginTop: '4rem',
+          marginBottom: '4rem',
         }}
+        spacing={10}
       >
         <Grid item container direction="column" alignItems="center">
           <Grid item>
@@ -31,11 +34,20 @@ export default function Promo() {
           </Grid>
         </Grid>
 
-        <Grid item container>
+        <Grid
+          item
+          container
+          justifyContent="space-evenly"
+          alignItems="center"
+          spacing={10}
+        >
           {/* promo products links */}
-          <Grid item></Grid>
-          <Grid item></Grid>
-          <Grid item></Grid>
+          {products instanceof Array &&
+            products.map((product) => (
+              <Grid item>
+                <ProductCard product={product} />
+              </Grid>
+            ))}
         </Grid>
       </Grid>
     </div>

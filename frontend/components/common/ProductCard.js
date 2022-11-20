@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertTitle,
   Button,
   Card,
   CardActionArea,
@@ -31,6 +33,7 @@ export default function ProductCard({ product }) {
   const [sale, setSale] = useState(false);
   const [highPrice, setHighPrice] = useState(0);
   const [lowPrice, setLowPrice] = useState(0);
+  const [percentage, setPercentage] = useState(0);
 
   const router = useRouter();
 
@@ -50,34 +53,28 @@ export default function ProductCard({ product }) {
   // console.log(product);
 
   useEffect(() => {
+    product && setHighPrice(product.highestprice);
     product && product.dendels_variants instanceof Array
-      ? setLowPrice(product.dendels_variants[0].highPrice)
+      ? setLowPrice(product.dendels_variants[0].lowPrice)
       : setLowPrice(50000);
 
     product && product.dendels_variants instanceof Array
       ? product.dendels_variants.forEach((variant) => {
           if (variant.sale) {
             setSale(true);
+          }
 
-            if (variant.lowPrice < lowPrice) {
-              setLowPrice(variant.lowPrice);
-            }
-
-            if (variant.lowPrice > highPrice) {
-              setHighPrice(variant.lowPrice);
-            }
-          } else {
-            if (variant.highPrice < lowPrice) {
-              setLowPrice(variant.highPrice);
-            }
-
-            if (variant.highPrice > highPrice) {
-              setHighPrice(variant.highPrice);
-            }
+          if (variant.lowPrice < lowPrice) {
+            setLowPrice(variant.lowPrice);
           }
         })
       : undefined;
   }, [product]);
+
+  useEffect(() => {
+    const val = ((highPrice - lowPrice) * 100) / highPrice;
+    setPercentage(val.toFixed(0));
+  }, [highPrice, lowPrice]);
 
   const theme = useTheme();
 
@@ -115,15 +112,23 @@ export default function ProductCard({ product }) {
       alignItems="center"
     >
       <Grid item>
-        <Card sx={{ width: imgWidth }} elevation={5}>
+        <Card
+          sx={{
+            width: imgWidth,
+            borderImage: `url('${CardBG.src}') 30`,
+            borderWidth: '0.5rem',
+            borderStyle: 'solid',
+          }}
+          elevation={5}
+        >
           <CardActionArea onClick={handleGotoProduct(prod.slug)}>
             <Card
               elevation={0}
               sx={{
                 width: imgWidth,
-                background: `url(${CardBG.src})`,
-                backgroundRepeat: 'no-repeat',
-                backgroundSize: 'cover',
+                // background: `url(${CardBG.src})`,
+                // backgroundRepeat: 'no-repeat',
+                // backgroundSize: 'cover',
               }}
             >
               <Grid container justifyContent="center" alignItems="center">
@@ -155,12 +160,24 @@ export default function ProductCard({ product }) {
                 </Grid>
 
                 <Grid item>
+                  <Alert severity="success" variant="outlined">
+                    <AlertTitle>
+                      <strong style={{ fontSize: '1rem' }}>
+                        {percentage}% OFF
+                      </strong>
+                    </AlertTitle>
+                    Hurry while stock last!
+                  </Alert>
+                </Grid>
+
+                <Grid item>
                   <Typography
                     sx={{
                       fontSize: '1.5rem',
                     }}
                   >
-                    ${lowPrice} ~ ${highPrice}
+                    <s style={{ fontWeight: '300' }}>${highPrice}</s> $
+                    {lowPrice}
                   </Typography>
                 </Grid>
               </Grid>
@@ -184,7 +201,7 @@ export default function ProductCard({ product }) {
               textAlign={'center'}
               sx={{ fontSize: '1.1rem', color: 'white' }}
             >
-              Items On Sale!
+              Item On Sale!
             </Typography>
           </Card>
         </Grid>

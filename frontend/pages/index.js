@@ -12,7 +12,7 @@ import Latest from '../components/Home/Latest';
 import GiftSets from '../components/Home/GiftSets';
 import Subscribe from '../components/Home/Subscribe';
 
-export default function Home({ featured }) {
+export default function Home({ featured, promo }) {
   useEffect(() => {
     const sendDebug = async () => {
       try {
@@ -39,7 +39,7 @@ export default function Home({ featured }) {
       {/* Categories */}
       <Categories />
       {/* Special promo */}
-      <Promo />
+      <Promo products={promo} />
       {/* Subscribe */}
       <Subscribe />
     </Layout>
@@ -53,9 +53,15 @@ export async function getStaticProps() {
     );
     const featured = await res.json();
 
+    const res2 = await fetch(
+      process.env.STRAPI_BASE + 'dendels-products?promo=true'
+    );
+    const promo = await res2.json();
+
     return {
       props: {
         featured,
+        promo,
       },
     };
   } catch (e) {}
