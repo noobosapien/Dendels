@@ -145,7 +145,7 @@ export default function Bundle({ bundle, variants }) {
               </Grid>
 
               <Grid container item spacing={10} justifyContent="space-evenly">
-                {bundle.dendels_products instanceof Array &&
+                {bundle?.dendels_products instanceof Array &&
                   bundle.dendels_products?.map((prod) => (
                     <Grid item key={`__${prod.id}`}>
                       <SmallProductCard small product={prod} />
@@ -285,7 +285,7 @@ export async function getStaticProps(context) {
     const bundle = (await res.json())[0];
     const variants = [];
 
-    if (bundle.dendels_products instanceof Array) {
+    if (bundle?.dendels_products instanceof Array) {
       for (var i = 0; i < bundle.dendels_products.length; i++) {
         const vars = await getAllVariants(bundle.dendels_products[i]._id);
 
