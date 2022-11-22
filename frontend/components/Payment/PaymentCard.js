@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Typography,
 } from '@mui/material';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import HomeIcon from '@mui/icons-material/Home';
@@ -27,6 +28,13 @@ import countries from '../../utils/countries';
 import BillingAddress from './BillingAddress';
 import Cookies from 'js-cookie';
 import Message from '../common/Message';
+import Visa from '../../public/visa.svg';
+import MC from '../../public/mastercard.svg';
+import UP from '../../public/unionpay.svg';
+import AX from '../../public/amex.svg';
+import JCB from '../../public/jcb.svg';
+import Discover from '../../public/discover.svg';
+import Image from 'next/image';
 
 export default function PaymentCard({ loading, setLoading }) {
   const { state, dispatch } = useContext(Store);
@@ -664,6 +672,29 @@ export default function PaymentCard({ loading, setLoading }) {
 
       <CardContent>
         <Grid container direction="column" spacing={4}>
+          <Grid item container spacing={2} alignItems="center">
+            <Grid item>
+              <Typography>Accepted cards:</Typography>
+            </Grid>
+            <Grid item>
+              <Image src={Visa} width={30} height={30} />
+            </Grid>
+            <Grid item>
+              <Image src={MC} width={30} height={30} />
+            </Grid>
+            <Grid item>
+              <Image src={AX} width={30} height={30} />
+            </Grid>
+            <Grid item>
+              <Image src={JCB} width={30} height={30} />
+            </Grid>
+            <Grid item>
+              <Image src={Discover} width={30} height={30} />
+            </Grid>
+            <Grid item>
+              <Image src={UP} width={30} height={30} />
+            </Grid>
+          </Grid>
           <Grid item>{cardWrapper}</Grid>
 
           <Grid item>

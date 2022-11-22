@@ -2,8 +2,9 @@ import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { Card, Grid, IconButton, Typography } from '@mui/material';
+import { Badge, Card, Grid, IconButton, Typography } from '@mui/material';
 import Image from 'next/image';
+import CardBG from '../../public/cardbg.png';
 
 export default function BaggedBundle({ item, removeItemHandler }) {
   const theme = useTheme();
@@ -12,33 +13,53 @@ export default function BaggedBundle({ item, removeItemHandler }) {
   console.log('Bagged bundle: ', item);
 
   return (
-    <Card variant="outlined" sx={{ width: matchesSM ? '18rem' : '30rem' }}>
+    <Card
+      variant="outlined"
+      sx={{
+        width: matchesSM ? '18rem' : '30rem',
+        borderImage: `url('${CardBG.src}') 30`,
+        borderWidth: '0.5rem',
+        borderStyle: 'solid',
+      }}
+    >
       <Grid container direction="column" spacing={2}>
         <Grid item container justifyContent="space-between">
-          <Grid item>
-            <Typography>Bundle</Typography>
-          </Grid>
-
-          <Grid item>
+          <Grid item />
+          <Grid item alignSelf="flex-end">
             <IconButton onClick={removeItemHandler}>
               <CloseIcon />
             </IconButton>
           </Grid>
         </Grid>
 
-        <Grid item container>
+        <Grid item container justifyContent="center" spacing={8}>
           <Grid item>
             {/* Image */}
-            <Image src={item.image.url} width={200} height={200} />
+            <Badge
+              color="secondary"
+              badgeContent={'Bundle'}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+            >
+              <Image src={item.image.url} width={230} height={230} />
+            </Badge>
           </Grid>
 
-          <Grid item container>
+          <Grid item container justifyContent="center" spacing={2}>
             <Grid item>
               {/* name */}
-              <Typography>{item.name}</Typography>
+              <Typography sx={{ fontSize: '1rem' }}>{item.name}</Typography>
             </Grid>
 
-            <Grid item container>
+            <Grid item xs={12} />
+
+            <Grid item>
+              <Typography>Items included:</Typography>
+            </Grid>
+
+            <Grid item container justifyContent="center" spacing={4}>
               {/* variant pics */}
               {item.dendels_variants.map((variant) => (
                 <Grid item>
@@ -47,9 +68,11 @@ export default function BaggedBundle({ item, removeItemHandler }) {
               ))}
             </Grid>
 
-            <Grid item>
+            <Grid item alignSelf="flex-end">
               {/* Price */}
-              <Typography>${item.lowPrice.toFixed(2)}</Typography>
+              <Typography variant="body2" sx={{ fontSize: '2rem' }}>
+                ${item.lowPrice.toFixed(2)}
+              </Typography>
             </Grid>
           </Grid>
         </Grid>

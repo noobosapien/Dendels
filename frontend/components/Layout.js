@@ -27,6 +27,13 @@ import SearchDialog from './common/SearchDialog';
 import { useRouter } from 'next/router';
 import { Store } from '../utils/store';
 import ContactForm from './common/ContactForm';
+import Logo from '../public/Logo.png';
+import Visa from '../public/visa.svg';
+import MC from '../public/mastercard.svg';
+import UP from '../public/unionpay.svg';
+import AX from '../public/amex.svg';
+import JCB from '../public/jcb.svg';
+import Discover from '../public/discover.svg';
 
 const LogoButton = styled(Typography)(({ theme }) => ({
   [theme.breakpoints.up('xs')]: {
@@ -195,7 +202,52 @@ export default function Layout({ title, description, children }) {
       >
         {/* <Divider sx={{ marginBottom: '1rem' }} /> */}
 
-        <Grid container alignItems="center">
+        <Grid container alignItems="center" justifyContent="center">
+          <Grid item md={4}>
+            <Grid container direction="column" alignItems="center" spacing={2}>
+              <Grid item>
+                <Image src={Logo} width={150} height={28.87} />
+              </Grid>
+
+              <Grid item>
+                <Typography sx={{ fontWeight: '500' }}>
+                  Currency: NZD
+                </Typography>
+              </Grid>
+
+              <Grid
+                item
+                container
+                justifyContent="center"
+                spacing={2}
+                alignItems="center"
+              >
+                <Grid item>
+                  <Typography>We Accept: </Typography>
+                </Grid>
+
+                <Grid item>
+                  <Image src={Visa} width={30} height={30} />
+                </Grid>
+                <Grid item>
+                  <Image src={MC} width={30} height={30} />
+                </Grid>
+                <Grid item>
+                  <Image src={AX} width={30} height={30} />
+                </Grid>
+                <Grid item>
+                  <Image src={JCB} width={30} height={30} />
+                </Grid>
+                <Grid item>
+                  <Image src={Discover} width={30} height={30} />
+                </Grid>
+                <Grid item>
+                  <Image src={UP} width={30} height={30} />
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+
           <Grid item container alignItems="center" direction="column" md={4}>
             <ContactForm />
           </Grid>

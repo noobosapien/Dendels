@@ -22,7 +22,7 @@ export default function Message({ text, severity, open, setOpen }) {
       <Snackbar
         anchorOrigin={
           matchesMD
-            ? { vertical: 'top', horizontal: 'center' }
+            ? { vertical: 'bottom', horizontal: 'center' }
             : { vertical: 'bottom', horizontal: 'left' }
         }
         open={open}

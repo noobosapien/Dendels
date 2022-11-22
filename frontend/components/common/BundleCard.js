@@ -125,7 +125,7 @@ export default function BundleCard({ bundle }) {
             <Grid container item>
               {/* Description */}
               <Grid item>
-                <Typography>{bundle.description}</Typography>
+                <Typography>{bundle.description.slice(0, 80)}...</Typography>
               </Grid>
             </Grid>
             <Grid container item spacing={8}>

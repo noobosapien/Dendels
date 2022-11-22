@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 export default function Terms() {
   return (
     <Layout>
-      <div style={{ padding: '2rem' }}>
+      <div style={{ padding: '3rem', fontSize: '1rem' }}>
         <h1>TERMS OF SERVICE</h1>
 
         <h2>OVERVIEW</h2>
@@ -439,7 +439,7 @@ export default function Terms() {
 
         <p>
           Questions about the Terms of Service should be sent to us at
-          hi@dendels.com.
+          hi@dendels.co.nz.
         </p>
       </div>
     </Layout>

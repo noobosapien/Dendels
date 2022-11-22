@@ -4,11 +4,11 @@ import Layout from '../components/Layout';
 export default function Privacy() {
   return (
     <Layout>
-      <div style={{ padding: '2rem' }}>
+      <div style={{ padding: '3rem', fontSize: '1rem' }}>
         <h1>Privacy Policy for Dendels</h1>
 
         <p>
-          At dendels, accessible from https://dendels.com, one of our main
+          At dendels, accessible from https://dendels.co.nz, one of our main
           priorities is the privacy of our visitors. This Privacy Policy
           document contains types of information that is collected and recorded
           by dendels and how we use it.

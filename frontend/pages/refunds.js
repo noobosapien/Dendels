@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 export default function Refunds() {
   return (
     <Layout>
-      <div style={{ padding: '2rem' }}>
+      <div style={{ padding: '3rem', fontSize: '1rem' }}>
         <h1>RETURN POLICY</h1>
 
         <p>
@@ -16,17 +16,17 @@ export default function Refunds() {
         <h3>RETURNS</h3>
 
         <p>
-          All returns must be postmarked within 7 days of the purchase date. All
-          returned items must be in new and unused condition, with all original
-          tags and labels attached.
+          All returns must be postmarked within 14 days of the purchase date.
+          All returned items must be in new and unused condition, with all
+          original tags and labels attached.
         </p>
 
         <h3>RETURN PROCESS</h3>
 
         <p>
-          To return an item, please email customer service at hi@dendels.com to
-          obtain a Return Merchandise Authorization (RMA) number, place the item
-          securely in it's original packaging and mail your return to the
+          To return an item, please email customer service at hi@dendels.co.nz
+          to obtain a Return Merchandise Authorization (RMA) number, place the
+          item securely in it's original packaging and mail your return to the
           following address:
         </p>
 
@@ -34,11 +34,9 @@ export default function Refunds() {
           <p>Dendels</p>
           <p style={{ marginTop: '-1rem' }}>Attn: Returns</p>
           <p style={{ marginTop: '-1rem' }}>RMA#</p>
-          <p style={{ marginTop: '-1rem' }}>
-            16/32, 1st lane, Wijayapura, Pinhena, Kottawa
-          </p>
-          <p style={{ marginTop: '-1rem' }}>Colombo, Colombo 10230</p>
-          <p style={{ marginTop: '-1rem' }}>Sri Lanka</p>
+          <p style={{ marginTop: '-1rem' }}>7 Lockington Avenue,</p>
+          <p style={{ marginTop: '-1rem' }}>Henderson, Auckland 0612,</p>
+          <p style={{ marginTop: '-1rem' }}>Auckland, New Zealand</p>
         </p>
 
         <p>
@@ -71,7 +69,7 @@ export default function Refunds() {
           us at:
         </p>
 
-        <h4>hi@dendels.com</h4>
+        <h4>hi@dendels.co.nz</h4>
       </div>
     </Layout>
   );

@@ -1,7 +1,10 @@
 import { Button, Card, CardContent, Grid, Typography } from '@mui/material';
 import React from 'react';
+import { useRouter } from 'next/router';
 
 export default function Returns() {
+  const router = useRouter();
+
   return (
     <>
       <Card
@@ -11,23 +14,29 @@ export default function Returns() {
         }}
       >
         <CardContent>
-          <Grid container>
+          <Grid container spacing={2} direction="column">
             <Grid item>
-              <Typography>Returns policy in a nutshell:</Typography>
+              <Typography sx={{ fontSize: '1rem', fontWeight: '500' }}>
+                Returns policy in a nutshell:
+              </Typography>
             </Grid>
             <Grid item xs={12} />
 
             <Grid item>
-              <Typography>
+              <Typography sx={{ fontSize: '1rem' }}>
                 If you are unhappy with the product, send it back to us with in
-                7 days and we will refund you the cost of the product+the
+                14 days and we will refund you the cost of the product+the
                 shipping fees.
               </Typography>
             </Grid>
 
             <Grid item xs={12} />
-            <Grid item>
-              <Button size="small" variant="outlined">
+            <Grid item alignSelf={'flex-end'}>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={(e) => router.push('/refunds')}
+              >
                 Read more
               </Button>
             </Grid>

@@ -12,8 +12,12 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import PaymentCard from '../components/Payment/PaymentCard';
 
+// const stripePromise = loadStripe(
+//   'pk_test_51LxN8jA2zx4WKMEf8lGT5U1pn1qYbM3vEW9JehjXQqlvJOB7g9H00pH4jUMOKVOxDvzUYDek0x4e48O4Lv4w5rkW00JKDuOMRY'
+// );
+
 const stripePromise = loadStripe(
-  'pk_test_51LxN8jA2zx4WKMEf8lGT5U1pn1qYbM3vEW9JehjXQqlvJOB7g9H00pH4jUMOKVOxDvzUYDek0x4e48O4Lv4w5rkW00JKDuOMRY'
+  'pk_live_51LxN8jA2zx4WKMEfzBA3YG4dQeBvgZXPuz01pY7ZkIdOgyPkie0ay1ubdsEnLaUJQpHK1KKLWlbZOMvvumYcWKeQ00cjYTrIfd'
 );
 
 export default function Checkout() {

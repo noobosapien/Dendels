@@ -135,6 +135,11 @@ export default function Bundle({ bundle, variants }) {
           <Grid item md={5}>
             <Grid container direction="column" spacing={8} alignItems="center">
               <Grid item>
+                <Typography sx={{ fontSize: '1.4rem' }}>
+                  {bundle.name}
+                </Typography>
+              </Grid>
+              <Grid item>
                 <Typography
                   sx={{
                     fontSize: '1rem',
@@ -219,9 +224,9 @@ export default function Bundle({ bundle, variants }) {
                 alignItems="center"
               >
                 <Grid item container xs={6} spacing={1} alignItems="center">
-                  <Grid item>
+                  {/* <Grid item>
                     <Typography>Price:</Typography>
-                  </Grid>
+                  </Grid> */}
 
                   <Grid item>
                     <Typography>

@@ -132,7 +132,7 @@ export default function ContactForm() {
         </Grid>
 
         <Grid item>
-          <Typography sx={{ fontWeight: '700' }}>hi@dendels.com</Typography>
+          <Typography sx={{ fontWeight: '700' }}>hi@dendels.co.nz</Typography>
         </Grid>
       </Grid>
     </Grid>
