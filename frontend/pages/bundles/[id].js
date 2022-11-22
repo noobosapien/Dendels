@@ -136,7 +136,7 @@ export default function Bundle({ bundle, variants }) {
             <Grid container direction="column" spacing={8} alignItems="center">
               <Grid item>
                 <Typography sx={{ fontSize: '1.4rem' }}>
-                  {bundle.name}
+                  {bundle?.name}
                 </Typography>
               </Grid>
               <Grid item>
